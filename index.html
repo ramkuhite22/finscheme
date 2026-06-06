@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinScheme - Discover Central &amp; State Government Schemes in India</title>
+  <meta name="description"
+    content="FinScheme helps you discover 1,000+ central and state government schemes tailored to your profile. Check eligibility for scholarships, subsidies, and grants with ease.">
+  <meta property="og:title" content="FinScheme - Find Government Benefits Simplified">
+  <meta property="og:description"
+    content="Find and apply for 1,000+ government schemes. Simple eligibility checks for Indian citizens.">
+  <meta property="og:image" content="https://finscheme.com/assets/brand/og-image.png">
+  <meta property="og:url" content="https://finscheme.com">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FinScheme - Discover Government Schemes">
+  <meta name="twitter:description" content="Discover 1,000+ Indian government schemes tailored to your profile.">
+  <meta name="theme-color" content="#1e3a8a">
+  <link rel="icon" type="image/png" href="assets/brand/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/home-landing.css">
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .hero-route-card img, .choice-card img {
+      animation: float 4s ease-in-out infinite;
+    }
+    .hero-route-card:nth-child(2) img { animation-delay: 0.5s; }
+    .hero-route-card:nth-child(3) img { animation-delay: 1s; }
+    .hero-route-card:nth-child(4) img { animation-delay: 1.5s; }
+  </style>
+  <script defer crossorigin="anonymous"
+    data-clerk-publishable-key="pk_test_bGl2aW5nLWNyYW5lLTMxLmNsZXJrLmFjY291bnRzLmRldiQ"
+    src="https://living-crane-31.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+    type="text/javascript"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/clerk-init.js" defer></script>
+  <script src="js/external-apis.js" defer></script>
+</head>
+
+<body class="loading home-landing" data-scout-feed="data/scout-feed.json" data-scout-api="/api/scout" data-public-config="/api/public-config">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="global-loader">
+    <div id="loader-canvas"></div>
+    <div class="loader-text">
+      <span>Analyzing Ecosystem</span>
+      <span class="loader-dot">.</span>
+      <span class="loader-dot">.</span>
+      <span class="loader-dot">.</span>
+    </div>
+  </div>
+
+  <div id="holiday-alert-banner" class="holiday-banner" style="display: none;">
+    <div class="holiday-banner-inner">
+      <i data-lucide="info"></i>
+      <span>Government Holiday Alert: Today is <span id="holiday-today-name">...</span>. Government offices may be closed.</span>
+    </div>
+  </div>
+
+  <div id="mahadbt-alert-banner" style="background: linear-gradient(135deg, rgba(21, 128, 61, 0.1), rgba(21, 128, 61, 0.05)); border-bottom: 1px solid rgba(21, 128, 61, 0.2); padding: 12px 24px; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.95rem;">
+    <i data-lucide="sprout" style="color: #15803d; width: 20px; height: 20px;"></i>
+    <span style="color: #14532d; display: flex; align-items: center; flex-wrap: wrap; justify-content: center;">
+      <strong style="margin-right: 6px;">Kharif 2026 Seed Subsidy:</strong> 
+      Apply on MahaDBT by May 15, 2026 for 40-100% subsidy on certified seeds. 
+      <a href="https://mahadbt.maharashtra.gov.in/Farm" target="_blank" style="color: #15803d; font-weight: 600; text-decoration: underline; margin-left: 8px; display: inline-flex; align-items: center; gap: 4px;">
+        Apply Now <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+      </a>
+    </span>
+  </div>
+
+  <div class="scroll-progress" id="scrollBar"></div>
+
+  <header class="topbar">
+    <div class="nav">
+      <a href="index.html" class="brand">
+        <img src="assets/brand/logo.png" alt="FinScheme official logo">
+        <span>FinScheme</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="pages/find.html">Schemes</a>
+        <a href="pages/rights.html">Rights</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="pages/about.html">About</a>
+      </nav>
+
+      <div class="nav-actions" id="user-auth">
+        <button class="btn btn-outline mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+          <i data-lucide="menu"></i>
+        </button>
+        <button class="btn btn-primary btn-shimmer" id="login-btn">Login</button>
+        <div id="user-button"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="home-main" id="main-content">
+    <section class="hero-section hero-editorial">
+      <div class="section-shell hero-shell">
+        <div class="hero-content">
+          <div id="welcome-msg" class="welcome-chip" style="display: none;">
+            <i data-lucide="sparkles"></i>
+            Welcome back, <span id="user-name"></span>
+          </div>
+
+          <div class="hero-kicker">
+            <span class="hero-kicker-badge">Independent public-benefits guide</span>
+            <span class="hero-kicker-text">Official-link handoff, plain-language guidance, and faster discovery for Indian citizens</span>
+          </div>
+
+          <h1>
+            Stop guessing.
+            <span class="shiny-text">Start finding the schemes</span>
+            that actually fit your life.
+          </h1>
+
+          <p class="hero-lead">
+            Most government portals are a maze. We built FinScheme to help you find the exact scholarships, subsidies, and grants you actually qualify for, then point you straight to the official application.
+          </p>
+
+          <form class="hero-mini-search" action="pages/find.html" method="get">
+            <label for="mainSearch">Start with a quick search</label>
+            <div class="hero-mini-search-row">
+              <input id="mainSearch" name="q" type="text"
+                placeholder="Search PM Kisan, scholarship, subsidy, MSME loan..." autocomplete="off">
+              <button class="btn btn-primary" type="submit">
+                Search now
+                <i data-lucide="arrow-up-right"></i>
+              </button>
+            </div>
+          </form>
+
+          <div class="hero-actions">
+            <a href="#schemeWizard" class="btn btn-primary btn-shimmer magnetic-target">
+              Build my shortlist
+              <i data-lucide="arrow-right"></i>
+            </a>
+            <a href="pages/find.html" class="btn btn-outline">
+              Browse all schemes
+              <i data-lucide="layout-grid"></i>
+            </a>
+          </div>
+
+          <div class="hero-proof-list">
+            <div class="hero-proof-item">
+              <i data-lucide="check-circle"></i>
+              <span>1,000+ central and state schemes</span>
+            </div>
+            <div class="hero-proof-item">
+              <i data-lucide="shield-check"></i>
+              <span>Official-source links kept front and center</span>
+            </div>
+            <div class="hero-proof-item">
+              <i data-lucide="clock-3"></i>
+              <span>Guided shortlist in under 60 seconds</span>
+            </div>
+          </div>
+
+          <div class="hero-route-grid" aria-label="Popular paths into FinScheme">
+            <a href="pages/education.html" class="hero-route-card spotlight-card">
+              <div class="hero-route-top">
+                <img src="assets/photos/education_3d_icon_new.png" alt="3D Education Icon" style="width: 48px; height: 48px; margin-bottom: 0.5rem; filter: drop-shadow(0 10px 15px rgba(30, 58, 138, 0.2));">
+                <span>Student support</span>
+              </div>
+              <strong>Scholarships and fee relief</strong>
+              <p>Start with education schemes, fellowships, and student-focused support.</p>
+            </a>
+            <a href="pages/agriculture.html" class="hero-route-card spotlight-card">
+              <div class="hero-route-top">
+                <img src="assets/photos/farmer_3d_icon_new.png" alt="3D Farmer Icon" style="width: 48px; height: 48px; margin-bottom: 0.5rem; filter: drop-shadow(0 10px 15px rgba(21, 128, 61, 0.2));">
+                <span>Farmer support</span>
+              </div>
+              <strong>Subsidies and agri programs</strong>
+              <p>Check crop, irrigation, equipment, and livelihood-linked schemes.</p>
+            </a>
+            <a href="pages/business.html" class="hero-route-card spotlight-card">
+              <div class="hero-route-top">
+                <img src="assets/photos/business_3d_icon_new.png" alt="3D Business Icon" style="width: 48px; height: 48px; margin-bottom: 0.5rem; filter: drop-shadow(0 10px 15px rgba(180, 83, 9, 0.2));">
+                <span>Business growth</span>
+              </div>
+              <strong>MSME and startup benefits</strong>
+              <p>Explore grants, credit links, incentives, and entrepreneurship support.</p>
+            </a>
+            <a href="pages/rights.html" class="hero-route-card spotlight-card">
+              <div class="hero-route-top">
+                <i data-lucide="scale"></i>
+                <span>Rights and protections</span>
+              </div>
+              <strong>Plain-language civic guidance</strong>
+              <p>Understand essential rights before you deal with forms, offices, or disputes.</p>
+            </a>
+          </div>
+
+          <div class="step-progress">
+            <div class="step-progress-bar" id="searchProgress"></div>
+            <p class="label-caps">Profile completion: <span id="progressText">33%</span></p>
+          </div>
+
+          <div class="conversational-form spotlight-card" id="schemeWizard">
+            <div class="wizard-topline">
+              <div>
+                <p class="wizard-eyebrow">Guided discovery</p>
+                <h2>Build a practical shortlist</h2>
+              </div>
+              <div class="step-indicator" aria-label="Wizard progress">
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+              </div>
+            </div>
+            <p class="wizard-feedback" id="wizardFeedback" role="status" aria-live="polite">Answer three quick questions and we&apos;ll pre-fill a stronger starting point.</p>
+
+            <div class="form-step active" data-step="1">
+              <div class="premium-input-group">
+                <label>Who is this search mainly for?</label>
+                <p>Choose the closest path so FinScheme can start from the right scheme category.</p>
+                <div class="choice-grid">
+                  <button type="button" class="choice-card" data-value="Education">
+                    <img src="assets/photos/education_3d_icon_new.png" alt="Education" style="width: 64px; height: 64px; margin-bottom: 0.5rem;">
+                    <h3>Student</h3>
+                    <span>Scholarships, fellowships, and education-linked benefits</span>
+                  </button>
+                  <button type="button" class="choice-card" data-value="Agriculture">
+                    <img src="assets/photos/farmer_3d_icon_new.png" alt="Farmer" style="width: 64px; height: 64px; margin-bottom: 0.5rem;">
+                    <h3>Farmer</h3>
+                    <span>Subsidies, irrigation, crop support, and agri assistance</span>
+                  </button>
+                  <button type="button" class="choice-card" data-value="Business">
+                    <img src="assets/photos/business_3d_icon_new.png" alt="Entrepreneur" style="width: 64px; height: 64px; margin-bottom: 0.5rem;">
+                    <h3>Entrepreneur</h3>
+                    <span>MSME incentives, startup support, and business growth schemes</span>
+                  </button>
+                </div>
+              </div>
+              <div class="form-navigation">
+                <button class="btn btn-primary next-step" type="button">
+                  Next question
+                  <i data-lucide="arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-step" data-step="2">
+              <div class="premium-input-group">
+                <label>What kind of help do you want first?</label>
+                <p>We&apos;ll use this to pre-fill the discovery page with a stronger keyword focus.</p>
+                <div class="choice-grid">
+                  <button type="button" class="choice-card" data-value="scholarship">
+                    <i data-lucide="badge-indian-rupee"></i>
+                    <h3>Scholarships</h3>
+                    <span>Fee support, stipends, and study-related assistance</span>
+                  </button>
+                  <button type="button" class="choice-card" data-value="subsidy">
+                    <i data-lucide="badge-percent"></i>
+                    <h3>Subsidies</h3>
+                    <span>Equipment, housing, farming, and utility-linked relief</span>
+                  </button>
+                  <button type="button" class="choice-card" data-value="loan">
+                    <i data-lucide="landmark"></i>
+                    <h3>Loans and grants</h3>
+                    <span>Startup, self-employment, and growth-oriented schemes</span>
+                  </button>
+                </div>
+              </div>
+              <div class="form-navigation">
+                <button class="btn btn-outline prev-step" type="button">Go back</button>
+                <button class="btn btn-primary next-step" type="button">
+                  Final step
+                  <i data-lucide="arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-step" data-step="3">
+              <div class="premium-input-group">
+                <label>Your state or coverage area</label>
+                <p>We&apos;ll combine central opportunities with the state view you want to start from.</p>
+                <select class="premium-input" id="wizardState">
+                  <option value="">Choose coverage...</option>
+                  <option value="ALL">All India</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Karnataka">Karnataka</option>
+                  <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                </select>
+                <div id="location-suggestion" class="location-suggestion" style="display: none;">
+                  <button type="button" id="use-detected-location">
+                    Detected your state as <span id="detected-state-name">...</span>. Use it?
+                  </button>
+                </div>
+              </div>
+              <div class="form-navigation">
+                <button class="btn btn-outline prev-step" type="button">Go back</button>
+                <button class="btn btn-primary btn-shimmer" id="finalizeWizard" type="button">
+                  Build my shortlist
+                  <i data-lucide="search"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-chip-row">
+            <span class="hero-chip-label">Popular outcomes</span>
+            <span class="pill">Scholarships</span>
+            <span class="pill">MSME support</span>
+            <span class="pill">Farmer subsidies</span>
+            <span class="pill">Official-link guidance</span>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-visual-stack">
+            <div class="hero-metric-card hero-metric-card-top">
+              <span class="metric-label">Live scheme count</span>
+              <strong id="schemeCount">1000+</strong>
+              <p>Verified central and state entries</p>
+            </div>
+
+            <div class="hero-visual-frame">
+              <canvas id="neural-canvas" style="position: absolute; inset: 0; z-index: 1; pointer-events: none;"></canvas>
+              <div class="hero-visual-backdrop"></div>
+              <img src="assets/photos/hero_citizen_3d_new.png"
+                alt="A sleek, minimalist 3D rendering of a modern Indian citizen using a laptop, surrounded by glowing document icons"
+                loading="eager"
+                fetchpriority="high"
+                decoding="async">
+              <div class="hero-floating-card hero-floating-card-left">
+                <span class="floating-card-title">Updated weekly</span>
+                <p>Policy changes, forms, and deadlines tracked across official portals.</p>
+              </div>
+              <div class="hero-floating-card hero-floating-card-right">
+                <span class="floating-card-title">Built for action</span>
+                <p>Check match, collect documents, then go to the official application link.</p>
+              </div>
+            </div>
+
+            <div class="hero-capsule-row">
+              <div class="hero-capsule">
+                <i data-lucide="graduation-cap"></i>
+                <span>Students</span>
+              </div>
+              <div class="hero-capsule">
+                <i data-lucide="wallet"></i>
+                <span>Farmers</span>
+              </div>
+              <div class="hero-capsule">
+                <i data-lucide="briefcase"></i>
+                <span>MSMEs</span>
+              </div>
+              <div class="hero-capsule">
+                <i data-lucide="heart"></i>
+                <span>Health</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-strip" aria-label="Quick readiness and trust signals">
+      <div class="section-shell trust-strip-shell">
+        <div class="trust-strip-grid">
+          <article class="trust-strip-card trust-strip-card-strong">
+            <span class="trust-strip-label">First-time-ready checklist</span>
+            <strong>Keep the Big 6 documents ready</strong>
+            <p>Aadhaar, domicile, income certificate, marksheets, caste proof, and a bank passbook cover the most common first application paths.</p>
+          </article>
+
+          <article class="trust-strip-card" id="live-holiday">
+            <div class="trust-strip-status">
+              <i data-lucide="calendar-days"></i>
+              <div>
+                <span class="trust-strip-label">Planning signal</span>
+                <strong id="next-holiday-val">Loading...</strong>
+              </div>
+            </div>
+            <p>Useful when you are timing visits to banks, colleges, or government offices.</p>
+          </article>
+
+          <article class="trust-strip-card" id="live-location">
+            <div class="trust-strip-status">
+              <i data-lucide="map-pinned"></i>
+              <div>
+                <span class="trust-strip-label">Detected coverage area</span>
+                <strong id="user-location-val">Detecting...</strong>
+              </div>
+            </div>
+            <p>We use this only to suggest a better starting state for your shortlist.</p>
+          </article>
+        </div>
+
+        <div class="portal-pill-row" aria-label="Common official portals">
+          <a class="portal-pill" href="https://india.gov.in" target="_blank" rel="noopener">
+            <i data-lucide="landmark"></i>
+            National Portal
+          </a>
+          <a class="portal-pill" href="https://scholarships.gov.in" target="_blank" rel="noopener">
+            <i data-lucide="graduation-cap"></i>
+            National Scholarships Portal
+          </a>
+          <a class="portal-pill" href="https://mahadbt.maharashtra.gov.in" target="_blank" rel="noopener">
+            <i data-lucide="badge-indian-rupee"></i>
+            MahaDBT
+          </a>
+          <a class="portal-pill" href="https://pmkisan.gov.in" target="_blank" rel="noopener">
+            <i data-lucide="sprout"></i>
+            PM-Kisan
+          </a>
+          <a class="portal-pill" href="https://msme.gov.in" target="_blank" rel="noopener">
+            <i data-lucide="briefcase-business"></i>
+            MSME Portal
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works">
+      <div class="section-shell">
+        <div class="section-header">
+          <p class="section-kicker">How it works</p>
+          <h2>From profile to official portal in three steps</h2>
+          <p>We stripped away the government jargon and built a clean, fast way to figure out what you qualify for.</p>
+        </div>
+
+        <div class="bento-grid reveal-container">
+          <article class="bento-item bento-item-lg spotlight-card reveal-item">
+            <div class="bento-icon"><i data-lucide="user-plus"></i></div>
+            <div class="bento-content">
+              <h3>Build a quick profile</h3>
+              <p>Income, category, and state are enough to narrow thousands of entries into a realistic shortlist.</p>
+            </div>
+            <ul class="bento-list">
+              <li>60-second setup</li>
+              <li>No payment required</li>
+              <li>Designed for first-time users</li>
+            </ul>
+          </article>
+
+          <article class="bento-item bento-item-dark reveal-item">
+            <div class="bento-icon"><i data-lucide="check-circle"></i></div>
+            <div class="bento-content">
+              <h3>Check eligibility fast</h3>
+              <p>No more jumping between random sites and PDF announcements just to understand the basics.</p>
+            </div>
+          </article>
+
+          <article class="bento-item spotlight-card reveal-item">
+            <div class="bento-icon"><i data-lucide="file-text"></i></div>
+            <div class="bento-content">
+              <h3>See document requirements</h3>
+              <p>Aadhaar, income proof, caste certificate, bank passbook, and other essentials are surfaced early.</p>
+            </div>
+          </article>
+
+          <article class="bento-item bento-item-wide bento-item-accent spotlight-card reveal-item">
+            <div class="bento-icon"><i data-lucide="arrow-up-right"></i></div>
+            <div class="bento-content">
+              <h3>Apply from the official source</h3>
+              <p>FinScheme points you to the actual destination so you stay on government websites when it is time to apply.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="graph-section">
+      <div class="section-shell graph-shell">
+        <div class="section-header section-header-left">
+          <p class="section-kicker">Relationship map</p>
+          <h2>Explore the scheme ecosystem instead of treating every program like an isolated page</h2>
+          <p>The visual map below shows how categories, central schemes, and state-specific schemes connect across the dataset.</p>
+        </div>
+
+        <div class="graph-stage">
+          <aside class="graph-aside">
+            <div class="graph-aside-card">
+              <p class="graph-aside-label">What this helps with</p>
+              <ul>
+                <li>Understand overlap between categories and schemes</li>
+                <li>Spot whether an opportunity is central or state-led</li>
+                <li>Get a better feel for the breadth of the platform</li>
+              </ul>
+            </div>
+          </aside>
+
+          <div class="graph-panel shadow-lg">
+            <div id="scheme-graph" style="position: relative;">
+              <div id="graph-tooltip" class="graph-tooltip" style="opacity: 0; pointer-events: none; position: absolute;"></div>
+            </div>
+            <div class="graph-controls">
+              <button id="reset-graph" class="btn btn-outline btn-sm" type="button">Reset map</button>
+              <div class="graph-legend">
+                <div class="legend-item"><span class="dot dot-central"></span> Central</div>
+                <div class="legend-item"><span class="dot dot-state"></span> State</div>
+                <div class="legend-item"><span class="dot dot-category"></span> Category</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="application-readiness-section">
+      <div class="section-shell readiness-shell">
+        <div class="readiness-copy">
+          <p class="section-kicker">Before you apply</p>
+          <h2>Start with the checks that stop most first-time rejections</h2>
+          <p>Our own FinScheme planning docs point to the same pattern again and again: users do better when they see the key documents, common rejection traps, and status terms before they chase dozens of schemes.</p>
+
+          <div class="readiness-step-row" aria-label="Recommended application flow">
+            <span class="readiness-step">1. Check eligibility</span>
+            <span class="readiness-step">2. Collect documents</span>
+            <span class="readiness-step">3. Apply on the official portal</span>
+            <span class="readiness-step">4. Track status weekly</span>
+          </div>
+
+          <p class="readiness-note">If you are in Maharashtra, start by confirming your Aadhaar link, domicile, and income certificate dates before you open a long application form.</p>
+
+          <div class="cta-actions">
+            <a href="#schemeWizard" class="btn btn-primary btn-shimmer magnetic-target">
+              Build my shortlist
+              <i data-lucide="arrow-right"></i>
+            </a>
+            <a href="pages/documents.html" class="btn btn-outline">
+              View resource pages
+              <i data-lucide="folder-open"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="readiness-grid">
+          <article class="readiness-card">
+            <span class="readiness-card-label">Big 6 documents</span>
+            <h3>Keep these ready first</h3>
+            <ul class="readiness-list">
+              <li>Aadhaar linked to a mobile number for OTPs</li>
+              <li>Maharashtra domicile for state-specific benefits</li>
+              <li>Fresh income certificate from the Tahsildar</li>
+              <li>10th or 12th marksheets plus current bonafide</li>
+              <li>Caste certificate and validity where applicable</li>
+              <li>Bank passbook with Aadhaar-seeded NPCI mapping</li>
+            </ul>
+          </article>
+
+          <article class="readiness-card readiness-card-alert">
+            <span class="readiness-card-label">Top rejection traps</span>
+            <h3>What usually goes wrong</h3>
+            <ul class="readiness-list">
+              <li>Name mismatch between Aadhaar and bank records</li>
+              <li>Expired income certificate from the previous cycle</li>
+              <li>Live-photo mismatch during final submission</li>
+              <li>Large or blurry PDF uploads that fail portal checks</li>
+            </ul>
+          </article>
+
+          <article class="readiness-card readiness-card-wide">
+            <span class="readiness-card-label">Status terms that matter</span>
+            <div class="status-grid">
+              <div class="status-chip">
+                <strong>Under scrutiny</strong>
+                <p>Your documents are being checked by the reviewing office.</p>
+              </div>
+              <div class="status-chip">
+                <strong>Defect rectification</strong>
+                <p>An error was found and you usually need to fix it within the portal deadline.</p>
+              </div>
+              <div class="status-chip">
+                <strong>Approved or disbursed</strong>
+                <p>The money is cleared and should move to the linked bank account.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="segment-section">
+      <div class="section-shell">
+        <div class="section-header">
+          <p class="section-kicker">Built around real use cases</p>
+          <h2>Who we focus on</h2>
+          <p>We focus on three main groups, because trying to be everything to everyone usually ends up helping nobody.</p>
+        </div>
+
+        <div class="segment-showcase">
+          <article class="segment-card spotlight-card">
+            <div class="segment-badge">Most searched</div>
+            <img src="assets/photos/education_3d_icon_new.png"
+              alt="Sleek glowing graduation cap and books" class="segment-illustration" loading="lazy" decoding="async">
+            <h3>For students</h3>
+            <p>Scholarships, fellowships, fee support, and education-linked benefits.</p>
+            <ul>
+              <li>Merit and need-based opportunities</li>
+              <li>Central and state scholarship pathways</li>
+              <li>Document prep before application</li>
+            </ul>
+          </article>
+
+          <article class="segment-card spotlight-card segment-card-tinted">
+            <div class="segment-badge segment-badge-blue">High subsidy</div>
+            <img src="assets/photos/farmer_3d_icon_new.png"
+              alt="Sleek glowing seedling in soil" class="segment-illustration" loading="lazy" decoding="async">
+            <h3>For farmers</h3>
+            <p>Insurance, crop support, agri-tech assistance, and subsidy-led programs.</p>
+            <ul>
+              <li>Equipment and irrigation support</li>
+              <li>Crop and livelihood programs</li>
+              <li>Faster discovery of scheme updates</li>
+            </ul>
+          </article>
+
+          <article class="segment-card spotlight-card">
+            <div class="segment-badge segment-badge-amber">Growth support</div>
+            <img src="assets/photos/business_3d_icon_new.png"
+              alt="Sleek glowing briefcase with growth charts" class="segment-illustration">
+            <h3>For entrepreneurs</h3>
+            <p>MSME incentives, startup support, grants, credit links, and tax-adjacent benefits.</p>
+            <ul>
+              <li>Startup India and MSME discovery</li>
+              <li>Business expansion and capital support</li>
+              <li>Clearer navigation to official portals</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-section">
+      <div class="section-shell trust-shell">
+        <div class="trust-copy">
+          <p class="section-kicker">Trust and safety</p>
+          <h2>We don't issue the schemes. We just make them easier to find.</h2>
+          <p class="trust-warning">We are an independent team. FinScheme is not a government website, but we will always link you directly to the official source.</p>
+
+          <div class="trust-features">
+            <article class="trust-feature">
+              <div class="trust-feature-icon"><i data-lucide="landmark"></i></div>
+              <div>
+                <h3>Official-source references</h3>
+                <p>Use FinScheme to discover and understand. Apply only on the linked government destination.</p>
+              </div>
+            </article>
+
+            <article class="trust-feature">
+              <div class="trust-feature-icon"><i data-lucide="shield-check"></i></div>
+              <div>
+                <h3>Privacy-minded guidance</h3>
+                <p>Do not share OTPs, do not pay agents, and verify every submission on the final official portal.</p>
+              </div>
+            </article>
+
+            <article class="trust-feature">
+              <div class="trust-feature-icon"><i data-lucide="file-text"></i></div>
+              <div>
+                <h3>Document clarity</h3>
+                <p>Surface common requirements earlier so users can decide whether a scheme is realistically actionable.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="trust-visual">
+          <div class="trust-orbit">
+            <div class="orbit-circle orbit-circle-sm">
+              <div class="orbit-item orbit-top"><i data-lucide="shield-check"></i></div>
+              <div class="orbit-item orbit-bottom"><i data-lucide="lock"></i></div>
+            </div>
+            <div class="orbit-circle orbit-circle-lg">
+              <div class="orbit-item orbit-left"><i data-lucide="verified"></i></div>
+              <div class="orbit-item orbit-right"><i data-lucide="landmark"></i></div>
+            </div>
+            <div class="trust-core">
+              <img src="assets/icons/shield-check.svg" alt="Shield icon illustrating trust and safety">
+            </div>
+          </div>
+          <div class="trust-note-card">
+            <p class="trust-note-label">Reminder</p>
+            <p>FinScheme helps you decide where to go next. The final application step should always happen on the official government website.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rights-preview-section">
+      <div class="section-shell rights-shell">
+        <div class="rights-grid reveal-container">
+          <article class="rights-card clay reveal-item">
+            <div class="rights-card-icon rights-card-icon-green"><i data-lucide="scale"></i></div>
+            <h3>Equality</h3>
+            <p>Core protections and discrimination-related basics.</p>
+          </article>
+          <article class="rights-card clay reveal-item rights-card-offset">
+            <div class="rights-card-icon rights-card-icon-blue"><i data-lucide="graduation-cap"></i></div>
+            <h3>Education</h3>
+            <p>Student and child-centered rights with practical context.</p>
+          </article>
+          <article class="rights-card clay reveal-item rights-card-lift">
+            <div class="rights-card-icon rights-card-icon-pink"><i data-lucide="baby"></i></div>
+            <h3>Maternity</h3>
+            <p>Important protections that often go under-discovered.</p>
+          </article>
+          <article class="rights-card clay reveal-item">
+            <div class="rights-card-icon rights-card-icon-amber"><i data-lucide="info"></i></div>
+            <h3>Information</h3>
+            <p>Useful civic rights for everyday interactions and accountability.</p>
+          </article>
+        </div>
+
+        <div class="rights-copy">
+          <p class="section-kicker">Civic empowerment</p>
+          <h2>Rights every Indian should be able to find without legal jargon</h2>
+          <p>From refunds and FIR basics to employment protections and public-service accountability, we also help users understand the laws that shape everyday life.</p>
+          <a href="pages/rights.html" class="btn btn-primary btn-shimmer">
+            Explore all rights
+            <i data-lucide="chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="humanizer-section">
+      <div class="section-shell">
+        <div class="section-header">
+          <p class="section-kicker">Plain-language tool</p>
+          <h2>Government Jargon Humanizer</h2>
+          <p>Government scheme PDFs can be dense, formal, and hard to act on. Paste a paragraph below to turn it into simpler language before you decide what to do next.</p>
+        </div>
+
+        <div class="humanizer-panel spotlight-card">
+          <div class="humanizer-intro">
+            <div class="humanizer-pill">
+              <i data-lucide="badge-help"></i>
+              Best for eligibility clauses, document instructions, and PDF notices
+            </div>
+            <p class="humanizer-helper">Use this before opening a long portal form. It is meant to reduce confusion, not replace the official wording.</p>
+          </div>
+
+          <div class="humanizer-grid">
+            <div class="humanizer-box">
+              <div class="humanizer-box-head">
+                <label class="humanizer-box-label" for="humanizerInput">Official government text</label>
+                <select id="humanizerTone" class="humanizer-select">
+                  <option value="simple">Make it Simple</option>
+                  <option value="student">Explain for a Student</option>
+                  <option value="farmer">Explain for a Farmer</option>
+                  <option value="elderly">Explain for Senior Citizens</option>
+                </select>
+              </div>
+              <div id="humanizerInput" contenteditable="true" class="humanizer-editor premium-input" role="textbox" aria-multiline="true">
+                Beneficiaries must <span class="humanizer-sample-mark humanizer-sample-mark-strong">furnish</span> an <span class="humanizer-sample-mark humanizer-sample-mark-soft">affidavit of income attestation</span> juxtaposed with <span class="humanizer-sample-mark humanizer-sample-mark-strong">domicile credentialing</span> prior to the disbursement window.
+              </div>
+              <div class="humanizer-badge humanizer-badge-warn">
+                <i data-lucide="alert-triangle"></i>
+                98% Bureaucratic Jargon
+              </div>
+            </div>
+
+            <button id="humanizeBtn" class="humanizer-action btn btn-primary btn-shimmer" type="button" aria-label="Translate into plain language">
+              <i data-lucide="sparkles"></i>
+            </button>
+
+            <div class="humanizer-box">
+              <label class="humanizer-box-label humanizer-box-label-success" for="humanizerOutput">Plain human translation</label>
+              <div id="humanizerOutput" class="humanizer-output premium-input">
+                "You must provide your <strong>Income Certificate</strong> and <strong>State Domicile Certificate</strong> before the deadline to get the money."
+              </div>
+              <div id="humanizerScore" class="humanizer-badge humanizer-badge-success">
+                <i data-lucide="check-circle-2"></i>
+                100% Plain English
+              </div>
+            </div>
+          </div>
+
+          <div class="humanizer-footer">
+            <span class="humanizer-trust">
+              <i data-lucide="sparkles"></i>
+              Powered by FinScheme plain-language AI
+            </span>
+            <p class="humanizer-helper">The simplified text is a guide. When you submit documents, always follow the final requirements shown on the official portal.</p>
+          </div>
+        </div>
+      </div>
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const btn = document.getElementById('humanizeBtn');
+          const output = document.getElementById('humanizerOutput');
+          const input = document.getElementById('humanizerInput');
+          const tone = document.getElementById('humanizerTone');
+
+          btn.addEventListener('click', async () => {
+            if (!input.innerText.trim()) return;
+
+            btn.disabled = true;
+            btn.setAttribute('aria-busy', 'true');
+            btn.style.transform = 'scale(0.9)';
+            btn.innerHTML = '<i data-lucide="loader-2" style="animation: spin 1s linear infinite"></i>';
+            lucide.createIcons();
+
+            output.style.opacity = '0.5';
+            output.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--primary);">Translating government jargon...</div>';
+            const scoreBadge = document.getElementById('humanizerScore');
+            if (scoreBadge) scoreBadge.style.opacity = '0';
+
+            try {
+              const response = await fetch('/api/humanize', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  text: input.innerText.trim(),
+                  tone: tone.value
+                })
+              });
+
+              const data = await response.json().catch(() => ({}));
+              if (!response.ok) {
+                throw new Error(data.error || 'Failed to humanize text');
+              }
+
+              if (scoreBadge) {
+                scoreBadge.style.opacity = '1';
+                const score = data.score || 100;
+                scoreBadge.innerHTML = `<i data-lucide="${score > 80 ? 'check-circle-2' : 'alert-circle'}" style="width: 12px; height: 12px;"></i> ${score}% Plain English`;
+
+                if (score > 80) {
+                  scoreBadge.style.background = 'rgba(16, 185, 129, 0.1)';
+                  scoreBadge.style.color = 'rgb(16, 185, 129)';
+                } else {
+                  scoreBadge.style.background = 'rgba(245, 158, 11, 0.1)';
+                  scoreBadge.style.color = 'rgb(245, 158, 11)';
+                }
+              }
+
+              btn.style.transform = 'scale(1)';
+              btn.innerHTML = '<i data-lucide="sparkles"></i>';
+              btn.disabled = false;
+              btn.removeAttribute('aria-busy');
+              lucide.createIcons();
+              output.style.opacity = '1';
+              output.innerHTML = data.result || '"Translation failed. Please try again."';
+            } catch (err) {
+              console.error(err);
+              btn.style.transform = 'scale(1)';
+              btn.innerHTML = '<i data-lucide="sparkles"></i>';
+              btn.disabled = false;
+              btn.removeAttribute('aria-busy');
+              lucide.createIcons();
+              output.style.opacity = '1';
+              output.innerHTML = '"Error connecting to the AI Server."';
+            }
+          });
+        });
+      </script>
+    </section>
+
+    <section id="faq" class="faq-section">
+      <div class="section-shell">
+        <div class="section-header">
+          <p class="section-kicker">FAQ</p>
+          <h2>Questions people usually ask before they trust a platform like this</h2>
+          <p>These answers help keep expectations clear while reinforcing that the final application step belongs on the official portal.</p>
+        </div>
+
+        <div class="faq-container">
+          <div class="accordion-item">
+            <button class="accordion-header" type="button">
+              <span>Is FinScheme a government website?</span>
+              <i data-lucide="chevron-down" class="accordion-icon"></i>
+            </button>
+            <div class="accordion-content">
+              No. FinScheme is an independent information platform designed to simplify access to government scheme data and direct users toward official portals.
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-header" type="button">
+              <span>How do I check my eligibility?</span>
+              <i data-lucide="chevron-down" class="accordion-icon"></i>
+            </button>
+            <div class="accordion-content">
+              Use the three-step guided discovery flow on the homepage. It helps you start with the right category, keyword, and state view before you browse the full directory.
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-header" type="button">
+              <span>Does FinScheme charge money to discover schemes?</span>
+              <i data-lucide="chevron-down" class="accordion-icon"></i>
+            </button>
+            <div class="accordion-content">
+              No. Discovery and guidance are free. If any application process requires payment, confirm that requirement on the final official portal before proceeding.
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-header" type="button">
+              <span>Can I apply directly on FinScheme?</span>
+              <i data-lucide="chevron-down" class="accordion-icon"></i>
+            </button>
+            <div class="accordion-content">
+              FinScheme helps you discover and prepare. The actual application should be completed on the official government website linked from each scheme page.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta-section">
+      <div class="section-shell">
+        <div class="final-cta-panel">
+          <p class="section-kicker">Ready to start</p>
+          <h2>Find the benefits you may be missing before they expire</h2>
+          <p>Use the eligibility wizard for a guided shortlist, or browse the full directory if you already know what you are looking for.</p>
+          <div class="cta-actions">
+            <a href="#schemeWizard" class="btn btn-primary btn-shimmer magnetic-target">
+              Get started now
+              <i data-lucide="arrow-right"></i>
+            </a>
+            <a href="pages/find.html" class="btn btn-outline">
+              View all schemes
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scout-section">
+      <div class="section-shell">
+        <div class="section-header">
+          <p class="section-kicker">Discovery feed</p>
+          <h2>AI scheme scout for faster signal, not more clutter</h2>
+          <p id="scoutSummary">A background scout watches official portals, caches the latest signal locally, and keeps this section fresher than a static demo.</p>
+          <div class="scout-status-line">
+            <span id="scoutUpdatedAt">Waiting for first background run...</span>
+          </div>
+        </div>
+
+        <div class="scout-grid">
+          <div class="scout-terminal spotlight-card">
+            <div class="terminal-header">
+              <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+              <span>web-agent-scout.worker</span>
+            </div>
+            <div class="terminal-body" id="scout-logs">
+              <div class="log-line"><span>[AGENT]</span> Waiting for background scout cycle...</div>
+              <div class="log-line cursor">_</div>
+            </div>
+          </div>
+
+          <div class="scout-results" id="scoutResults">
+            <article class="scout-card fade-in">
+              <div class="scout-badge">Monitoring</div>
+              <h3>Scout cache is warming up</h3>
+              <p>The first completed background cycle will replace this placeholder with official-source discoveries.</p>
+              <div class="scout-meta">Background worker</div>
+            </article>
+          </div>
+        </div>
+
+        <div class="scout-cta">
+          <button class="btn btn-primary btn-shimmer" id="scoutRefreshBtn" type="button">
+            Run scout now
+          </button>
+          <span id="scoutStatusText">Scout status: idle</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="feedback-section">
+      <div class="section-shell">
+        <div class="feedback-card spotlight-card">
+          <p class="section-kicker">Economics survey</p>
+          <h2>How do Central Government schemes affect savings and expenses?</h2>
+          <p>Take the survey directly on FinScheme. Responses can flow into Google Sheets and website analytics without sending people off-site.</p>
+          <a href="pages/economics-survey.html"
+            class="btn btn-primary btn-shimmer magnetic-target"
+            data-analytics-event="economics_survey_cta_click"
+            data-analytics-label="Homepage survey primary CTA"
+            data-analytics-location="homepage-feedback-card">
+            Start Economics survey
+            <i data-lucide="clipboard-list"></i>
+          </a>
+          <a href="pages/economics-survey.html"
+            class="btn btn-outline magnetic-target"
+            data-analytics-event="economics_survey_cta_click"
+            data-analytics-label="Homepage survey secondary CTA"
+            data-analytics-location="homepage-feedback-card">
+            View website form
+            <i data-lucide="clipboard-list"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="brand footer-brand-link">
+          <img src="assets/brand/logo.png" alt="FinScheme logo">
+          <span>FinScheme</span>
+        </a>
+        <p>
+          Empowering citizens by simplifying access to government schemes, rights, and official sources.
+        </p>
+      </div>
+
+      <div class="footer-links-group">
+        <h4>Platform</h4>
+        <div class="footer-link-list">
+          <a href="pages/find.html">Search schemes</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="pages/categories.html">Categories</a>
+        </div>
+      </div>
+
+      <div class="footer-links-group">
+        <h4>Company</h4>
+        <div class="footer-link-list">
+          <a href="pages/about.html">About us</a>
+          <a href="pages/documents.html">Resources</a>
+          <a href="pages/contact.html">Contact</a>
+        </div>
+      </div>
+
+      <div class="footer-links-group">
+        <h4>Legal</h4>
+        <div class="footer-link-list">
+          <a href="pages/privacy.html">Privacy policy</a>
+          <a href="pages/terms.html">Terms of service</a>
+          <a href="pages/cookie-policy.html">Cookie policy</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <p>&copy; 2026 FinScheme. Built with trust for every Indian.</p>
+        <div class="footer-socials">
+          <i data-lucide="mail"></i>
+          <i data-lucide="message-square"></i>
+          <i data-lucide="globe"></i>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="pages/economics-survey.html"
+    class="floating-feedback btn-shimmer"
+    data-analytics-event="economics_survey_cta_click"
+    data-analytics-label="Floating survey CTA"
+    data-analytics-location="homepage-floating-button">
+    <i data-lucide="message-square"></i>
+    Economics survey
+  </a>
+
+  <button id="agenticBubble" class="chat-toggle" aria-label="Open AI Assistant">
+    <i data-lucide="bot"></i>
+  </button>
+  <span id="chatNotifDot" class="chat-notif-dot"></span>
+
+  <div id="agenticChat" class="chat-panel">
+    <div class="chat-header">
+      <div class="chat-heading">
+        <div class="chat-icon-wrap"><i data-lucide="bot"></i></div>
+        <div>
+          <div class="chat-title">FinScheme AI</div>
+          <div class="chat-status">
+            <span class="chat-status-dot"></span>
+            Online - wizard enabled
+          </div>
+        </div>
+      </div>
+      <button id="closeChatBtn" class="chat-close" type="button" aria-label="Close chat">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <div id="chatMessages" class="chat-messages">
+      <div class="chat-message chat-message-ai">
+        Hi! I&apos;m your FinScheme assistant. Ask me about government schemes, your legal rights, or type
+        <strong>&quot;Am I eligible?&quot;</strong> to jump to the wizard.
+      </div>
+    </div>
+
+    <div id="chatQuickReplies" class="chat-quick-replies"></div>
+
+    <form id="chatForm" class="chat-form">
+      <input id="chatInput" type="text" placeholder="Ask about schemes, rights, deadlines..." autocomplete="off">
+      <button type="submit" aria-label="Send message">
+        <i data-lucide="send"></i>
+      </button>
+    </form>
+  </div>
+
+  <script src="js/cookie-consent.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+
+    window.addEventListener('clerk-ready', (event) => {
+      const user = event.detail.user;
+      const welcomeMsg = document.getElementById('welcome-msg');
+      const userName = document.getElementById('user-name');
+
+      if (user && welcomeMsg && userName) {
+        welcomeMsg.style.display = 'inline-flex';
+        userName.textContent = user.firstName || user.username || 'User';
+      }
+    });
+
+    async function loadStats() {
+      try {
+        const response = await fetch('data/schemes_en.json');
+        if (!response.ok) return;
+
+        const data = await response.json();
+        const countEl = document.getElementById('schemeCount');
+        if (countEl && Array.isArray(data) && data.length) {
+          countEl.textContent = data.length + '+';
+        }
+      } catch (error) {
+        console.error('Failed to load stats', error);
+      }
+    }
+
+    async function initSchemeGraph() {
+      const container = document.getElementById('scheme-graph');
+      const tooltip = document.getElementById('graph-tooltip');
+      if (!container || !window.d3) return;
+
+      try {
+        const response = await fetch('data/schemes_en.json');
+        if (!response.ok) throw new Error('Data not available');
+
+        const allSchemes = await response.json();
+        const categories = [...new Set(allSchemes.map((scheme) => scheme.category).filter(Boolean))];
+        const sampleSchemes = allSchemes.slice(0, 40);
+
+        const nodes = [
+          ...categories.map((category) => ({
+            id: category,
+            type: 'category',
+            label: category
+          })),
+          ...sampleSchemes.map((scheme) => ({
+            id: String(scheme.id),
+            type: scheme.applyLink && scheme.applyLink.includes('maharashtra') ? 'state' : 'central',
+            label: scheme.name.length > 20 ? scheme.name.slice(0, 20) + '...' : scheme.name,
+            fullName: scheme.name,
+            category: scheme.category,
+            ministry: scheme.ministry || 'Ministry of Finance',
+            objective: scheme.objective || 'Check eligibility and document requirements on details page.',
+            benefit: scheme.benefit || scheme.benefits || 'Financial Assistance / Subsidy'
+          }))
+        ];
+
+        const links = sampleSchemes
+          .filter((scheme) => scheme.category)
+          .map((scheme) => ({
+            source: scheme.category,
+            target: String(scheme.id)
+          }));
+
+        const width = container.clientWidth || 960;
+        const height = container.clientHeight || 560;
+
+        container.querySelectorAll('svg').forEach(el => el.remove());
+
+        const rootSvg = d3.select(container)
+          .append('svg')
+          .attr('width', '100%')
+          .attr('height', '100%')
+          .attr('viewBox', [0, 0, width, height]);
+
+        // Add SVG definitions (filters for neon glow)
+        const defs = rootSvg.append('defs');
+        const glowFilters = [
+          { id: 'glow-category', color: '#f59e0b', stdDev: 5 },
+          { id: 'glow-central', color: '#14b8a6', stdDev: 4 }, // var(--primary) HSL 174 86% 40% -> #14b8a6
+          { id: 'glow-state', color: '#3b82f6', stdDev: 4 }
+        ];
+
+        glowFilters.forEach(f => {
+          const filter = defs.append('filter')
+            .attr('id', f.id)
+            .attr('x', '-50%')
+            .attr('y', '-50%')
+            .attr('width', '200%')
+            .attr('height', '200%');
+
+          filter.append('feGaussianBlur')
+            .attr('stdDeviation', f.stdDev)
+            .attr('result', 'coloredBlur');
+
+          const merge = filter.append('feMerge');
+          merge.append('feMergeNode').attr('in', 'coloredBlur');
+          merge.append('feMergeNode').attr('in', 'SourceGraphic');
+        });
+
+        const zoomLayer = rootSvg.append('g');
+        const zoom = d3.zoom().scaleExtent([0.3, 3]).on('zoom', (event) => {
+          zoomLayer.attr('transform', event.transform);
+        });
+
+        rootSvg.call(zoom);
+
+        // Springy forces setup
+        const simulation = d3.forceSimulation(nodes)
+          .force('link', d3.forceLink(links).id((d) => d.id).distance(120))
+          .force('charge', d3.forceManyBody().strength(-300).distanceMax(300))
+          .force('center', d3.forceCenter(width / 2, height / 2))
+          .force('collision', d3.forceCollide().radius(d => d.type === 'category' ? 48 : 36).strength(0.8));
+
+        const link = zoomLayer.append('g')
+          .attr('class', 'graph-links')
+          .selectAll('line')
+          .data(links)
+          .join('line')
+          .attr('stroke', 'rgba(255, 255, 255, 0.15)')
+          .attr('stroke-opacity', 0.4)
+          .attr('stroke-width', 1.5);
+
+        const node = zoomLayer.append('g')
+          .attr('class', 'graph-nodes')
+          .selectAll('circle')
+          .data(nodes)
+          .join('circle')
+          .attr('r', (d) => d.type === 'category' ? 14 : 8)
+          .attr('fill', (d) => {
+            if (d.type === 'category') return '#f59e0b';
+            if (d.type === 'central') return '#14b8a6'; // Cyan/Teal
+            return '#3b82f6'; // Sky Blue
+          })
+          .attr('stroke', '#090d16')
+          .attr('stroke-width', 2.5)
+          .attr('filter', d => `url(#glow-${d.type})`)
+          .style('cursor', 'pointer')
+          .call(
+            d3.drag()
+              .on('start', dragStarted)
+              .on('drag', dragged)
+              .on('end', dragEnded)
+          );
+
+        const label = zoomLayer.append('g')
+          .attr('class', 'node-labels')
+          .selectAll('text')
+          .data(nodes)
+          .join('text')
+          .attr('dy', (d) => d.type === 'category' ? -22 : 18)
+          .attr('text-anchor', 'middle')
+          .text((d) => d.label)
+          .style('font-size', '10px')
+          .style('font-family', "'Space Grotesk', sans-serif")
+          .style('font-weight', (d) => d.type === 'category' ? '700' : '500')
+          .style('fill', 'rgba(248, 250, 252, 0.85)')
+          .style('pointer-events', 'none');
+
+        // Tooltip interaction
+        node
+          .on('mouseover', (event, d) => {
+            if (!tooltip) return;
+            tooltip.style.opacity = '1';
+            tooltip.style.transform = 'scale(1)';
+            
+            if (d.type === 'category') {
+              tooltip.innerHTML = `
+                <div class="tooltip-meta">Category</div>
+                <h4>${d.label}</h4>
+                <p>Explore all active schemes in this segment.</p>
+              `;
+            } else {
+              tooltip.innerHTML = `
+                <div class="tooltip-meta">${d.type === 'central' ? 'Central Scheme' : 'State Scheme'}</div>
+                <h4>${d.fullName}</h4>
+                <p>${d.objective}</p>
+                <div class="tooltip-benefit">${d.benefit}</div>
+              `;
+            }
+
+            d3.select(event.currentTarget)
+              .transition()
+              .duration(200)
+              .attr('r', d.type === 'category' ? 18 : 12)
+              .attr('stroke-width', 3.5);
+          })
+          .on('mousemove', (event) => {
+            if (!tooltip) return;
+            const containerRect = container.getBoundingClientRect();
+            const mouseX = event.clientX - containerRect.left;
+            const mouseY = event.clientY - containerRect.top;
+            
+            tooltip.style.left = `${mouseX + 15}px`;
+            tooltip.style.top = `${mouseY + 15}px`;
+          })
+          .on('mouseleave', (event, d) => {
+            if (!tooltip) return;
+            tooltip.style.opacity = '0';
+            tooltip.style.transform = 'scale(0.95)';
+            
+            d3.select(event.currentTarget)
+              .transition()
+              .duration(200)
+              .attr('r', d.type === 'category' ? 14 : 8)
+              .attr('stroke-width', 2.5);
+          });
+
+        // Double click to center node
+        node.on('dblclick', (event, d) => {
+          event.stopPropagation();
+          rootSvg.transition()
+            .duration(750)
+            .call(
+              zoom.transform,
+              d3.zoomIdentity.translate(width / 2, height / 2).scale(1.3).translate(-d.x, -d.y)
+            );
+        });
+
+        // Double click background to reset zoom
+        rootSvg.on('dblclick', () => {
+          rootSvg.transition()
+            .duration(750)
+            .call(zoom.transform, d3.zoomIdentity);
+        });
+
+        simulation.on('tick', () => {
+          link
+            .attr('x1', (d) => d.source.x)
+            .attr('y1', (d) => d.source.y)
+            .attr('x2', (d) => d.target.x)
+            .attr('y2', (d) => d.target.y);
+
+          node
+            .attr('cx', (d) => d.x)
+            .attr('cy', (d) => d.y);
+
+          label
+            .attr('x', (d) => d.x)
+            .attr('y', (d) => d.y);
+        });
+
+        function dragStarted(event) {
+          if (!event.active) simulation.alphaTarget(0.3).restart();
+          event.subject.fx = event.subject.x;
+          event.subject.fy = event.subject.y;
+        }
+
+        function dragged(event) {
+          event.subject.fx = event.x;
+          event.subject.fy = event.y;
+        }
+
+        function dragEnded(event) {
+          if (!event.active) simulation.alphaTarget(0);
+          event.subject.fx = null;
+          event.subject.fy = null;
+        }
+
+        const resetBtn = document.getElementById('reset-graph');
+        if (resetBtn) {
+          resetBtn.addEventListener('click', () => {
+            rootSvg.transition().duration(700).call(zoom.transform, d3.zoomIdentity);
+          });
+        }
+      } catch (error) {
+        console.error('Graph build failed', error);
+      }
+    }
+
+    loadStats();
+    initSchemeGraph();
+  </script>
+  <script src="js/ai-integration.js"></script>
+  <script src="js/curve-loader.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/scheme-scout.js"></script>
+  <script src="js/interactions.js"></script>
+  <script src="js/neural-bg.js"></script>
+  <script>
+    (function initChatToggle() {
+      const bubble = document.getElementById('agenticBubble');
+      const panel = document.getElementById('agenticChat');
+      const closeBtn = document.getElementById('closeChatBtn');
+      const notif = document.getElementById('chatNotifDot');
+
+      if (!bubble || !panel) return;
+
+      function openChat() {
+        bubble.classList.add('visible');
+        panel.classList.add('visible');
+        if (notif) notif.style.display = 'none';
+        setTimeout(() => document.getElementById('chatInput')?.focus(), 120);
+      }
+
+      function closeChat() {
+        bubble.classList.remove('visible');
+        panel.classList.remove('visible');
+      }
+
+      bubble.addEventListener('click', () => {
+        if (panel.classList.contains('visible')) {
+          closeChat();
+        } else {
+          openChat();
+        }
+      });
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closeChat);
+      }
+
+      if (!sessionStorage.getItem('fs_chat_seen')) {
+        setTimeout(() => {
+          if (notif) notif.style.display = 'block';
+        }, 5000);
+        sessionStorage.setItem('fs_chat_seen', '1');
+      }
+    })();
+  </script>
+  <button id="scrollToTop" class="btn btn-primary btn-shimmer" aria-label="Scroll to top" style="position: fixed; bottom: 2rem; right: 2rem; width: 48px; height: 48px; border-radius: 50%; display: none; z-index: 1000; justify-content: center; align-items: center;">
+    <i data-lucide="arrow-up"></i>
+  </button>
+</body>
+
+</html>
+
