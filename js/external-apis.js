@@ -71,6 +71,51 @@ async function fetchCurrency() {
     }
 }
 
+async function getNextLocalHoliday() {
+    try {
+        const response = await fetch('data/holiday.json');
+        if (!response.ok) throw new Error(`Failed to fetch local holidays: ${response.status}`);
+        const holidays = await response.json();
+        if (!holidays || holidays.length === 0) return null;
+
+        const now = new Date();
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+        const mappedHolidays = holidays.map(holiday => {
+            const [mStr, dStr] = holiday.date.split('-');
+            const month = parseInt(mStr, 10);
+            const day = parseInt(dStr, 10);
+            let hDate = new Date(now.getFullYear(), month - 1, day);
+            if (hDate < todayStart) {
+                hDate = new Date(now.getFullYear() + 1, month - 1, day);
+            }
+            return {
+                name: holiday.name,
+                date: hDate
+            };
+        });
+
+        mappedHolidays.sort((a, b) => a.date - b.date);
+        return mappedHolidays[0];
+    } catch (error) {
+        console.error("Error reading local holidays:", error);
+        return null;
+    }
+}
+
+async function useLocalHolidayFallback(holidayVal) {
+    const nextLocalHoliday = await getNextLocalHoliday();
+    if (nextLocalHoliday) {
+        const holidayDate = nextLocalHoliday.date.toLocaleDateString('en-IN', {
+            day: 'numeric',
+            month: 'short'
+        });
+        holidayVal.textContent = `Next: ${nextLocalHoliday.name} on ${holidayDate}`;
+    } else {
+        holidayVal.textContent = "No holiday today";
+    }
+}
+
 async function fetchHolidays() {
     const holidayVal = document.getElementById('next-holiday-val');
     if (!holidayVal) return;
@@ -93,13 +138,13 @@ async function fetchHolidays() {
                 });
                 holidayVal.textContent = `Next: ${nextHoliday.name} on ${holidayDate}`;
             } else {
-                holidayVal.textContent = "No holiday today";
+                await useLocalHolidayFallback(holidayVal);
             }
         }
     } catch (error) {
-        console.error("Holiday API Error:", error);
+        console.warn("Holiday API failed, falling back to local holiday data:", error);
         if (!holidayVal.innerHTML.includes('Today is a holiday')) {
-            holidayVal.textContent = "No holiday today";
+            await useLocalHolidayFallback(holidayVal);
         }
     }
 }
