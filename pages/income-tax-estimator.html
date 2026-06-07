@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Income Tax Estimator &mdash; FinScheme Tools</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <script src="../js/theme.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-init.js" defer></script>
+  <style>
+    /* Tool-specific inline styles */
+    .tool-container { max-width: 980px; margin: 0 auto; padding: 0 1.5rem; }
+    .tool-form-card { background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.75rem; box-shadow: var(--shadow-sm); }
+    .tool-form-card label { font-size: 0.8125rem; font-weight: 600; color: var(--dark); display: flex; flex-direction: column; gap: 0.375rem; }
+    .tool-form-card input, .tool-form-card select { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.9375rem; font-family: 'Lora', serif; transition: border-color 0.2s; }
+    .tool-form-card input:focus, .tool-form-card select:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px var(--primary-glow); }
+    .tool-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; }
+    .tool-actions { display: flex; gap: 0.625rem; margin-top: 1rem; flex-wrap: wrap; }
+    .tool-result { margin-top: 1rem; background: rgba(6, 95, 70, 0.05); padding: 1rem; border-radius: var(--radius); border-left: 4px solid var(--primary); color: var(--dark); font-size: 0.9375rem; line-height: 1.6; }
+    .tool-back { margin-top: 1rem; display: inline-block; color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.875rem; }
+    .tool-back:hover { color: var(--primary-dark); }
+    .btn-tool { padding: 0.625rem 1.25rem; border-radius: var(--radius-sm); border: none; background: var(--primary); color: white; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.875rem; }
+    .btn-tool:hover { background: var(--primary-dark); transform: translateY(-1px); }
+    .btn-tool-secondary { background: var(--text-muted); }
+    .btn-tool-secondary:hover { background: var(--dark); }
+  </style>
+
+  <meta property="og:title" content="FinScheme — Find the Right Government Schemes for You">
+  <meta property="og:description" content="Discover 1,000+ central & state government schemes. Check eligibility and apply with ease.">
+  <meta property="og:image" content="../assets/brand/logo.png">
+  <meta property="og:url" content="https://finscheme.com">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="../assets/brand/logo.png">
+
+</head>
+<body class="loading">
+  <div id="global-loader"><div id="loader-canvas"></div><div class="loader-text"><span>Loading</span><span class="loader-dot">.</span><span class="loader-dot">.</span><span class="loader-dot">.</span></div></div>
+  <div class="scroll-progress" id="scrollBar"></div>
+  <header class="topbar">
+    <div class="nav" style="height: 100%;">
+      <a href="../index.html" class="brand"><img src="../assets/brand/logo.png" alt="FinScheme Logo" loading="lazy"><span>FinScheme</span></a>
+      <nav class="nav-links"><a href="../index.html">Home</a><a href="find.html">Schemes</a><a href="guide.html">Guide</a><a href="tools.html">Tools</a><a href="about.html">About</a></nav>
+      <div class="nav-actions" id="user-auth">
+        <button class="btn btn-outline mobile-menu-btn" id="mobileMenuBtn" style="padding: 0.5rem; border-color: var(--border); border-radius: 8px;"><i data-lucide="menu"></i></button>
+
+        <button class="btn btn-primary btn-shimmer magnetic-target" id="login-btn" style="border-radius: var(--radius-pill); padding: 0.5rem 1.5rem;">Login</button>
+        <div id="user-button"></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero dot-pattern" style="grid-template-columns: 1fr; padding-bottom: 2rem;">
+      <div class="fade-in tool-container" style="text-align: center;"><h1>Income Tax <span class="shiny-text">Estimator</span></h1><p style="margin: 0 auto;">Estimate tax amount based on income and deductions (new regime).</p></div>
+    </section>
+    <section class="page-section"><div class="tool-container"><div class="tool-form-card spotlight-card clay">
+      <div class="tool-form-grid">
+        <label>Annual Income (₹)<input id="income" type="number" min="0" placeholder="e.g. 800000"></label>
+        <label>Standard Deduction (₹)<input id="deduction" type="number" min="0" value="75000" placeholder="75000"></label>
+      </div>
+      <div class="tool-actions"><button class="btn-tool" id="calcBtn">Estimate Tax</button></div>
+      <div id="result" class="tool-result">Enter income and calculate.</div>
+      <a class="tool-back" href="tools.html">&larr; Back to Tools</a>
+    </div></div></section>
+  </main>
+  <footer class="footer grid-pattern">
+    <div class="footer-content" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem;">
+      <div class="footer-brand"><a href="../index.html" class="brand" style="margin-bottom: 1.5rem;"><img src="../assets/brand/logo.png" alt="FinScheme Logo" loading="lazy"><span>FinScheme</span></a><p style="color: var(--text-muted); font-size: 0.9375rem; line-height: 1.6; max-width: 320px;">Empowering citizens by simplifying access to government schemes.</p></div>
+      <div class="footer-links-group"><h4 style="margin-bottom: 1.5rem; font-weight: 700;">Platform</h4><div style="display: flex; flex-direction: column; gap: 0.75rem;"><a href="find.html">Search Schemes</a><a href="guide.html">Guide</a><a href="categories.html">Categories</a></div></div>
+      <div class="footer-links-group"><h4 style="margin-bottom: 1.5rem; font-weight: 700;">Company</h4><div style="display: flex; flex-direction: column; gap: 0.75rem;"><a href="about.html">About Us</a><a href="tools.html">Tools</a><a href="links.html">Links</a></div></div>
+      <div class="footer-links-group"><h4 style="margin-bottom: 1.5rem; font-weight: 700;">Legal</h4><div style="display: flex; flex-direction: column; gap: 0.75rem;"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="cookie-policy.html">Cookie Policy</a></div></div>
+    </div>
+    <div class="footer-bottom"><div style="display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto; width: 100%;"><p>&copy; 2026 FinScheme. Built with trust for every Indian.</p><div style="display: flex; gap: 1.5rem;"><i data-lucide="twitter" style="width: 20px; cursor: pointer;"></i><i data-lucide="linkedin" style="width: 20px; cursor: pointer;"></i><i data-lucide="github" style="width: 20px; cursor: pointer;"></i></div></div></div>
+  </footer>
+
+  
+  <div id="cookie-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: white; padding: 1rem; text-align: center; z-index: 9999; display: flex; justify-content: center; gap: 1rem; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem;">
+    <span>We use cookies to improve your experience. By continuing, you agree to our <a href="privacy.html" style="color: var(--primary); text-decoration: underline;">Privacy Policy</a>.</span>
+    <button onclick="document.getElementById('cookie-banner').style.display='none'" class="btn btn-primary btn-sm" style="border-radius: 8px; padding: 0.5rem 1rem;">Accept All</button>
+  </div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+
+  <script>
+    document.getElementById("calcBtn").onclick=()=>{
+      const income=Number(document.getElementById("income").value);const ded=Number(document.getElementById("deduction").value)||75000;
+      const res=document.getElementById("result");
+      if(!income||income<=0){res.textContent="Enter valid annual income.";return;}
+      const taxable=Math.max(0,income-ded);
+      let tax=0;const slabs=[[400000,0],[400000,0.05],[400000,0.1],[400000,0.15],[400000,0.2],[Infinity,0.3]];
+      let rem=taxable;for(const[limit,rate]of slabs){const chunk=Math.min(rem,limit);tax+=chunk*rate;rem-=chunk;if(rem<=0)break;}
+      const cess=tax*0.04;const total=tax+cess;
+      function f(n){return "₹ "+Math.round(n).toLocaleString("en-IN");}
+      res.innerHTML="<strong>Taxable Income:</strong> "+f(taxable)+"<br><strong>Tax (New Regime):</strong> "+f(tax)+"<br><strong>Cess (4%):</strong> "+f(cess)+"<br><strong>Total:</strong> "+f(total);
+    };
+  </script>
+  <script src="../js/curve-loader.js"></script>
+  <script src="../js/interactions.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Government Holidays & Deadlines &mdash; FinScheme</title>
+  <meta name="description" content="View the list of official government holidays to plan your scheme applications and office visits accordingly.">
+  <link rel="stylesheet" href="../css/theme.css">
+  <script src="../js/theme.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-init.js" defer></script>
+
+  <meta property="og:title" content="FinScheme — Government Holidays">
+  <meta property="og:description" content="Check official government holidays to plan your office visits.">
+  <meta property="og:image" content="../assets/brand/logo.png">
+  <meta property="og:url" content="https://finscheme.com/pages/holiday.html">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="../assets/brand/logo.png">
+
+  <style>
+    .holiday-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .holiday-card {
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: all 0.2s ease-in-out;
+    }
+    .holiday-card:hover {
+      border-color: var(--primary-light);
+      transform: translateY(-2px);
+    }
+    .holiday-date-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: var(--primary-muted);
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-pill);
+      align-self: flex-start;
+      margin-bottom: 0.5rem;
+    }
+    .holiday-type-badge {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .type-gazetted {
+      color: var(--danger);
+    }
+    .type-regional {
+      color: var(--accent);
+    }
+    .holiday-card h3 {
+      font-size: 1.25rem;
+      color: var(--dark);
+      margin: 0;
+    }
+    .holiday-card p {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin: 0;
+    }
+    .upcoming-tag {
+      background: var(--accent);
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 8px;
+      vertical-align: middle;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body class="loading">
+  <div id="global-loader"><div id="loader-canvas"></div><div class="loader-text"><span>Loading Holidays</span><span class="loader-dot">.</span><span class="loader-dot">.</span><span class="loader-dot">.</span></div></div>
+  <div class="scroll-progress" id="scrollBar"></div>
+  <header class="topbar">
+    <div class="nav" style="height: 100%;">
+      <a href="../index.html" class="brand"><img src="../assets/brand/logo.png" alt="FinScheme Logo" loading="lazy"><span>FinScheme</span></a>
+      <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="find.html">Schemes</a>
+        <a href="guide.html">Guide</a>
+        <a href="tools.html">Tools</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="nav-actions" id="user-auth">
+        <button class="btn btn-outline mobile-menu-btn" id="mobileMenuBtn" style="padding: 0.5rem; border-color: var(--border); border-radius: 8px;"><i data-lucide="menu"></i></button>
+        <button class="btn btn-primary btn-shimmer magnetic-target" id="login-btn" style="border-radius: var(--radius-pill); padding: 0.5rem 1.5rem;">Login</button>
+        <div id="user-button"></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero dot-pattern">
+      <div class="blur-fade">
+        <span class="page-badge" style="margin-bottom: 1rem;">Calendar</span>
+        <h1>Government <span class="shiny-text">Holidays</span></h1>
+        <p>Plan your official visits and application deadlines around the national and regional holiday schedule.</p>
+      </div>
+    </section>
+
+    <section class="page-section">
+      <div class="scheme-filters">
+        <input type="text" id="searchInput" class="filter-input" placeholder="Search holidays...">
+      </div>
+      <div class="holiday-grid" id="results">
+        <div class="page-empty">Loading holiday data...</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer grid-pattern">
+    <div class="footer-bottom">
+      <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto; width: 100%;">
+        <p>&copy; 2026 FinScheme. Built with trust for every Indian.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+    let holidays = [];
+    const results = document.getElementById("results");
+    const searchInput = document.getElementById("searchInput");
+    
+    function formatDateStr(dateStr) {
+      // Date string is "MM-DD"
+      const parts = dateStr.split('-');
+      if(parts.length !== 2) return dateStr;
+      const d = new Date(new Date().getFullYear(), parseInt(parts[0])-1, parseInt(parts[1]));
+      return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+    }
+
+    function isUpcoming(dateStr) {
+      const parts = dateStr.split('-');
+      if(parts.length !== 2) return false;
+      const today = new Date();
+      const currentYear = today.getFullYear();
+      
+      const holidayDate = new Date(currentYear, parseInt(parts[0])-1, parseInt(parts[1]));
+      
+      // If the holiday has already passed this year, check against next year
+      if (holidayDate < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
+        return false;
+      }
+      
+      // Check if it's within the next 30 days
+      const thirtyDaysFromNow = new Date(today);
+      thirtyDaysFromNow.setDate(today.getDate() + 30);
+      
+      return holidayDate <= thirtyDaysFromNow;
+    }
+
+    function renderHolidays() {
+      const search = searchInput.value.trim().toLowerCase();
+      let list = holidays;
+      
+      if(search) {
+        list = list.filter(h => h.name.toLowerCase().includes(search) || h.type.toLowerCase().includes(search));
+      }
+      
+      results.innerHTML = "";
+      if(list.length === 0) {
+        results.innerHTML = '<div class="page-empty" style="grid-column: 1 / -1;">No holidays found.</div>';
+        return;
+      }
+      
+      list.forEach(holiday => {
+        const el = document.createElement("div");
+        el.className = "holiday-card spotlight-card clay";
+        
+        const upcomingHTML = isUpcoming(holiday.date) ? '<span class="upcoming-tag">Upcoming</span>' : '';
+        const typeClass = holiday.type.toLowerCase() === 'gazetted' ? 'type-gazetted' : 'type-regional';
+        
+        el.innerHTML = `
+          <div class="holiday-date-badge">
+            <i data-lucide="calendar" style="width: 16px; height: 16px;"></i>
+            ${formatDateStr(holiday.date)}
+          </div>
+          <span class="holiday-type-badge ${typeClass}">${holiday.type}</span>
+          <h3>${holiday.name} ${upcomingHTML}</h3>
+          <p>${holiday.description}</p>
+        `;
+        results.appendChild(el);
+      });
+      lucide.createIcons();
+    }
+
+    async function loadData() {
+      try {
+        const res = await fetch('../data/holiday.json');
+        if(!res.ok) throw new Error("HTTP error " + res.status);
+        holidays = await res.json();
+        
+        // Sort holidays by date
+        holidays.sort((a, b) => {
+          if (a.date < b.date) return -1;
+          if (a.date > b.date) return 1;
+          return 0;
+        });
+        
+        renderHolidays();
+      } catch(e) {
+        results.innerHTML = '<div class="page-empty" style="color: var(--danger); grid-column: 1 / -1;">Failed to load holiday dataset.</div>';
+      }
+    }
+    
+    searchInput.addEventListener("input", renderHolidays);
+    loadData();
+  </script>
+  <script src="../js/curve-loader.js"></script>
+  <script src="../js/interactions.js"></script>
+</body>
+</html>
+

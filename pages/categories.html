@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scheme Categories &mdash; FinScheme</title>
+  <meta name="description" content="Browse government schemes by category — Agriculture, Education, Business, Health, Housing, Women & Child.">
+  <link rel="stylesheet" href="../css/theme.css">
+  <script src="../js/theme.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-init.js" defer></script>
+
+  <meta property="og:title" content="FinScheme — Find the Right Government Schemes for You">
+  <meta property="og:description" content="Discover 1,000+ central & state government schemes. Check eligibility and apply with ease.">
+  <meta property="og:image" content="../assets/brand/logo.png">
+  <meta property="og:url" content="https://finscheme.com">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="../assets/brand/logo.png">
+
+</head>
+<body class="loading">
+  <div id="global-loader"><div id="loader-canvas"></div><div class="loader-text"><span>Loading Categories</span><span class="loader-dot">.</span><span class="loader-dot">.</span><span class="loader-dot">.</span></div></div>
+  <div class="scroll-progress" id="scrollBar"></div>
+  <header class="topbar">
+    <div class="nav" style="height: 100%;">
+      <a href="../index.html" class="brand"><img src="../assets/brand/logo.png" alt="FinScheme Logo" loading="lazy"><span>FinScheme</span></a>
+      <nav class="nav-links"><a href="../index.html">Home</a><a href="find.html">Schemes</a><a href="guide.html">Guide</a><a href="tools.html">Tools</a><a href="about.html">About</a></nav>
+      <div class="nav-actions" id="user-auth">
+        <button class="btn btn-outline mobile-menu-btn" id="mobileMenuBtn" style="padding: 0.5rem; border-color: var(--border); border-radius: 8px;"><i data-lucide="menu"></i></button>
+
+        <button class="btn btn-primary btn-shimmer magnetic-target" id="login-btn" style="border-radius: var(--radius-pill); padding: 0.5rem 1.5rem;">Login</button>
+        <div id="user-button"></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="how-it-works dot-pattern">
+      <div class="section-header fade-in">
+        <h2>Browse <span class="shiny-text">Schemes</span> By Category</h2>
+        <p>Select a category to discover targeted government benefits for your specific needs.</p>
+      </div>
+
+      <div class="bento-grid fade-in">
+        <!-- Agriculture -->
+        <a href="find.html?cat=Agriculture" class="segment-card card-hover bento-item-lg" style="text-decoration: none;">
+          <img src="../farmer_segment_1776253560902.png" alt="Agriculture" loading="lazy">
+          <div class="segment-overlay">
+            <h3>Agriculture</h3>
+            <p style="font-size: 0.875rem; color: #cbd5e1;">Support for farmers and rural development.</p>
+          </div>
+        </a>
+
+        <!-- Education -->
+        <a href="find.html?cat=Education" class="segment-card card-hover bento-item-wide" style="text-decoration: none;">
+          <img src="../student_segment_1776253483841.png" alt="Education" loading="lazy">
+          <div class="segment-overlay">
+            <h3>Education</h3>
+            <p style="font-size: 0.875rem; color: #cbd5e1;">Scholarships and academic grants for students.</p>
+          </div>
+        </a>
+
+        <!-- Business -->
+        <a href="find.html?cat=Business" class="segment-card card-hover bento-item-tall" style="text-decoration: none;">
+          <img src="../business_segment_1776253587479.png" alt="Business" loading="lazy">
+          <div class="segment-overlay">
+            <h3>Business & MSME</h3>
+            <p style="font-size: 0.875rem; color: #cbd5e1;">Loans and grants for entrepreneurs.</p>
+          </div>
+        </a>
+
+        <!-- Health -->
+        <a href="find.html?cat=Health" class="segment-card card-hover clay" style="text-decoration: none;">
+          <img src="https://images.unsplash.com/photo-1505751172157-c7285955fee2?auto=format&fit=crop&q=80&w=800" alt="Health" loading="lazy">
+          <div class="segment-overlay">
+            <h3>Healthcare</h3>
+            <p style="font-size: 0.875rem; color: #cbd5e1;">Medical insurance schemes.</p>
+          </div>
+        </a>
+
+        <!-- Women -->
+        <a href="find.html?cat=Women" class="segment-card card-hover clay" style="text-decoration: none;">
+          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800" alt="Women" loading="lazy">
+          <div class="segment-overlay">
+            <h3>Women & Child</h3>
+            <p style="font-size: 0.875rem; color: #cbd5e1;">Empowerment schemes.</p>
+          </div>
+        </a>
+
+        <!-- Housing -->
+        <a href="find.html?cat=Housing" class="segment-card card-hover clay" style="text-decoration: none;">
+          <img src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&q=80&w=800" alt="Housing" loading="lazy">
+          <div class="segment-overlay">
+            <h3>Housing</h3>
+            <p style="font-size: 0.875rem; color: #cbd5e1;">Urban development subsidies.</p>
+          </div>
+        </a>
+
+        <!-- Skills & Employment -->
+        <a href="skills-employment.html" class="segment-card card-hover clay" style="text-decoration: none;">
+          <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800" alt="Skills and Employment" loading="lazy">
+          <div class="segment-overlay">
+            <h3>Skills &amp; Employment</h3>
+            <p style="font-size: 0.875rem; color: #cbd5e1;">Vocational training &amp; job programmes.</p>
+            <span style="display:inline-block; margin-top:0.5rem; font-size:0.7rem; background:rgba(225,29,72,0.8); color:#fff; padding:2px 8px; border-radius:4px;">🔥 Yojana Doot Open</span>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer grid-pattern">
+    <div class="footer-content" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem;">
+      <div class="footer-brand"><a href="../index.html" class="brand" style="margin-bottom: 1.5rem;"><img src="../assets/brand/logo.png" alt="FinScheme Logo" loading="lazy"><span>FinScheme</span></a><p style="color: var(--text-muted); font-size: 0.9375rem; line-height: 1.6; max-width: 320px;">Empowering citizens by simplifying access to government schemes.</p></div>
+      <div class="footer-links-group"><h4 style="margin-bottom: 1.5rem; font-weight: 700;">Platform</h4><div style="display: flex; flex-direction: column; gap: 0.75rem;"><a href="find.html">Search Schemes</a><a href="guide.html">Guide</a><a href="categories.html">Categories</a></div></div>
+      <div class="footer-links-group"><h4 style="margin-bottom: 1.5rem; font-weight: 700;">Company</h4><div style="display: flex; flex-direction: column; gap: 0.75rem;"><a href="about.html">About Us</a><a href="tools.html">Tools</a><a href="links.html">Links</a></div></div>
+      <div class="footer-links-group"><h4 style="margin-bottom: 1.5rem; font-weight: 700;">Legal</h4><div style="display: flex; flex-direction: column; gap: 0.75rem;"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="cookie-policy.html">Cookie Policy</a></div></div>
+    </div>
+    <div class="footer-bottom"><div style="display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto; width: 100%;"><p>&copy; 2026 FinScheme. Built with trust for every Indian.</p><div style="display: flex; gap: 1.5rem;"><i data-lucide="twitter" style="width: 20px; cursor: pointer;"></i><i data-lucide="linkedin" style="width: 20px; cursor: pointer;"></i><i data-lucide="github" style="width: 20px; cursor: pointer;"></i></div></div></div>
+  </footer>
+
+  
+  <div id="cookie-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: white; padding: 1rem; text-align: center; z-index: 9999; display: flex; justify-content: center; gap: 1rem; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem;">
+    <span>We use cookies to improve your experience. By continuing, you agree to our <a href="privacy.html" style="color: var(--primary); text-decoration: underline;">Privacy Policy</a>.</span>
+    <button onclick="document.getElementById('cookie-banner').style.display='none'" class="btn btn-primary btn-sm" style="border-radius: 8px; padding: 0.5rem 1rem;">Accept All</button>
+  </div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+  <script src="../js/curve-loader.js"></script>
+  <script src="../js/interactions.js"></script>
+</body>
+</html>
+
+

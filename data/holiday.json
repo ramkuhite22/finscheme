@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Republic Day",
+    "date": "01-26",
+    "type": "Gazetted",
+    "description": "Celebrates the date on which the Constitution of India came into effect."
+  },
+  {
+    "name": "Ambedkar Jayanti",
+    "date": "04-14",
+    "type": "Gazetted",
+    "description": "Birth anniversary of Dr. B.R. Ambedkar, the father of the Indian Constitution."
+  },
+  {
+    "name": "Maharashtra Day",
+    "date": "05-01",
+    "type": "Regional",
+    "description": "Commemorates the formation of the state of Maharashtra."
+  },
+  {
+    "name": "Independence Day",
+    "date": "08-15",
+    "type": "Gazetted",
+    "description": "Commemorates India's independence from British rule."
+  },
+  {
+    "name": "Gandhi Jayanti",
+    "date": "10-02",
+    "type": "Gazetted",
+    "description": "Birth anniversary of Mahatma Gandhi, the Father of the Nation."
+  },
+  {
+    "name": "Christmas Day",
+    "date": "12-25",
+    "type": "Gazetted",
+    "description": "Celebration of the birth of Jesus Christ."
+  }
+]

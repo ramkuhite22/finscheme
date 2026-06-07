@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Utility Tools &mdash; FinScheme</title>
+  <meta name="description" content="Free utility tools for scheme applications: calculators, image tools, eligibility predictor, and more.">
+  <link rel="stylesheet" href="../css/theme.css">
+  <script src="../js/theme.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-init.js" defer></script>
+
+  <meta property="og:title" content="FinScheme — Find the Right Government Schemes for You">
+  <meta property="og:description" content="Discover 1,000+ central & state government schemes. Check eligibility and apply with ease.">
+  <meta property="og:image" content="../assets/brand/logo.png">
+  <meta property="og:url" content="https://finscheme.com">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="../assets/brand/logo.png">
+
+</head>
+<body class="loading">
+  <div id="global-loader">
+    <div id="loader-canvas"></div>
+    <div class="loader-text"><span>Loading Tools</span><span class="loader-dot">.</span><span class="loader-dot">.</span><span class="loader-dot">.</span></div>
+  </div>
+  <div class="scroll-progress" id="scrollBar"></div>
+  <header class="topbar">
+    <div class="nav" style="height: 100%;">
+      <a href="../index.html" class="brand"><img src="../assets/brand/logo.png" alt="FinScheme Logo" loading="lazy"><span>FinScheme</span></a>
+      <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="find.html">Schemes</a>
+        <a href="guide.html">Guide</a>
+        <a href="tools.html">Tools</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="nav-actions" id="user-auth">
+        <button class="btn btn-outline mobile-menu-btn" id="mobileMenuBtn" style="padding: 0.5rem; border-color: var(--border); border-radius: 8px;"><i data-lucide="menu"></i></button>
+
+        <button class="btn btn-primary btn-shimmer magnetic-target" id="login-btn" style="border-radius: var(--radius-pill); padding: 0.5rem 1.5rem;">Login</button>
+        <div id="user-button"></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero dot-pattern" style="grid-template-columns: 1fr;">
+      <div class="blur-fade" style="text-align: center; max-width: 700px; margin: 0 auto;">
+        <h1>Utility <span class="shiny-text">Tools</span></h1>
+        <p style="margin: 0 auto;">Open any tool below. Each card links to a separate page for that tool.</p>
+      </div>
+    </section>
+
+    <section class="page-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2 class="page-section-title">Available <span>Tools</span></h2>
+        <p id="countText" style="color: var(--text-muted); font-size: 0.875rem;"></p>
+      </div>
+      <div id="toolGrid" class="tool-grid"></div>
+    </section>
+
+    <section class="page-section">
+      <h2 class="page-section-title">Official Digital <span>Services</span></h2>
+      <p class="page-section-sub">Trusted government services that support document and identity tasks.</p>
+      <div class="resource-grid">
+        <div class="resource-card spotlight-card clay">
+          <h4>DigiLocker</h4>
+          <p>Secure storage of digital documents.</p>
+          <a href="https://www.digilocker.gov.in/" target="_blank" rel="noopener">Open official site &rarr;</a>
+        </div>
+        <div class="resource-card spotlight-card clay">
+          <h4>UIDAI (Aadhaar)</h4>
+          <p>Update Aadhaar details and services.</p>
+          <a href="https://uidai.gov.in/" target="_blank" rel="noopener">Open official site &rarr;</a>
+        </div>
+        <div class="resource-card spotlight-card clay">
+          <h4>Passport Seva</h4>
+          <p>Official passport services and appointment booking.</p>
+          <a href="https://www.passportindia.gov.in/psp" target="_blank" rel="noopener">Open official site &rarr;</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer grid-pattern">
+    <div class="footer-content" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem;">
+      <div class="footer-brand">
+        <a href="../index.html" class="brand" style="margin-bottom: 1.5rem;"><img src="../assets/brand/logo.png" alt="FinScheme Logo" loading="lazy"><span>FinScheme</span></a>
+        <p style="color: var(--text-muted); font-size: 0.9375rem; line-height: 1.6; max-width: 320px;">Empowering citizens by simplifying access to government schemes.</p>
+      </div>
+      <div class="footer-links-group">
+        <h4 style="margin-bottom: 1.5rem; font-weight: 700;">Platform</h4>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <a href="find.html">Search Schemes</a><a href="guide.html">Guide</a><a href="categories.html">Categories</a>
+        </div>
+      </div>
+      <div class="footer-links-group">
+        <h4 style="margin-bottom: 1.5rem; font-weight: 700;">Company</h4>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <a href="about.html">About Us</a><a href="tools.html">Tools</a><a href="links.html">Links</a>
+        </div>
+      </div>
+      <div class="footer-links-group">
+        <h4 style="margin-bottom: 1.5rem; font-weight: 700;">Legal</h4>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="cookie-policy.html">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto; width: 100%;">
+        <p>&copy; 2026 FinScheme. Built with trust for every Indian.</p>
+        <div style="display: flex; gap: 1.5rem;"><i data-lucide="twitter" style="width: 20px; cursor: pointer;"></i><i data-lucide="linkedin" style="width: 20px; cursor: pointer;"></i><i data-lucide="github" style="width: 20px; cursor: pointer;"></i></div>
+      </div>
+    </div>
+  </footer>
+
+  
+  <div id="cookie-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: white; padding: 1rem; text-align: center; z-index: 9999; display: flex; justify-content: center; gap: 1rem; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem;">
+    <span>We use cookies to improve your experience. By continuing, you agree to our <a href="privacy.html" style="color: var(--primary); text-decoration: underline;">Privacy Policy</a>.</span>
+    <button onclick="document.getElementById('cookie-banner').style.display='none'" class="btn btn-primary btn-sm" style="border-radius: 8px; padding: 0.5rem 1rem;">Accept All</button>
+  </div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+    const tools = [
+      { id: 1, name: "Income Calculator", file: "income-calculator.html", description: "Calculate monthly and annual income totals.", icon: "../assets/icons/calculator.svg" },
+      { id: 2, name: "Age Calculator", file: "age-calculator.html", description: "Find exact age from date of birth.", icon: "../assets/icons/users.svg" },
+      { id: 3, name: "Eligibility Predictor", file: "eligibility-predictor.html", description: "Predict likely scheme eligibility from profile inputs.", icon: "../assets/icons/shield-check.svg" },
+      { id: 4, name: "Image to PDF", file: "image-to-pdf.html", description: "Convert one or more images into a PDF file.", icon: "../assets/icons/file-text.svg" },
+      { id: 5, name: "Image Compressor", file: "image-compressor.html", description: "Reduce image file size for faster upload and sharing.", icon: "../assets/icons/filter.svg" },
+      { id: 6, name: "Income Tax Estimator", file: "income-tax-estimator.html", description: "Estimate tax amount based on income and deductions.", icon: "../assets/icons/bar-chart-3.svg" },
+      { id: 7, name: "Earning Calculator", file: "earning-calculator.html", description: "Estimate earnings by daily, weekly, or hourly inputs.", icon: "../assets/icons/calculator.svg" },
+      { id: 8, name: "BMI Calculator", file: "bmi-calculator.html", description: "Check Body Mass Index using height and weight.", icon: "../assets/icons/users.svg" },
+      { id: 9, name: "Passport Size Photo Generator", file: "passport-photo-generator.html", description: "Create passport-size photos from uploaded images or camera capture.", icon: "../assets/icons/map-pin.svg" }
+    ];
+    const toolGrid = document.getElementById("toolGrid");
+    const countText = document.getElementById("countText");
+    function renderTools() {
+      toolGrid.innerHTML = "";
+      countText.textContent = tools.length + " tools available";
+      tools.forEach(tool => {
+        const card = document.createElement("article");
+        card.className = "tool-card spotlight-card";
+        card.innerHTML = "<div class='tool-head'><img class='tool-icon' src='" + tool.icon + "' alt='' aria-hidden='true' loading="lazy"><h3>" + tool.id + ". " + tool.name + "</h3></div><p>" + tool.description + "</p><a href='" + tool.file + "'>Open " + tool.name + "</a>";
+        toolGrid.appendChild(card);
+      });
+    }
+    renderTools();
+  </script>
+  <script src="../js/curve-loader.js"></script>
+  <script src="../js/interactions.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "status": "fallback",
+  "updatedAt": "2026-04-25T15:32:04.621Z",
+  "summary": "Background scout refreshed official portal snapshots using fallback extraction because AI summarization was unavailable.",
+  "engine": {
+    "mode": "background-worker",
+    "agent": "web-agent-inspired",
+    "memory": "deepsleep-inspired"
+  },
+  "sources": [
+    {
+      "id": "myscheme",
+      "label": "myScheme",
+      "url": "https://www.myscheme.gov.in/",
+      "ok": true,
+      "status": 200,
+      "title": "myScheme",
+      "fetchedAt": "2026-04-25T15:31:53.792Z",
+      "error": null
+    },
+    {
+      "id": "nsp",
+      "label": "National Scholarship Portal",
+      "url": "https://scholarships.gov.in/",
+      "ok": true,
+      "status": 200,
+      "title": "NSP : National Scholarship Portal",
+      "fetchedAt": "2026-04-25T15:31:53.795Z",
+      "error": null
+    },
+    {
+      "id": "pm-kisan",
+      "label": "PM-Kisan",
+      "url": "https://pmkisan.gov.in/",
+      "ok": true,
+      "status": 200,
+      "title": "PM-Kisan Samman Nidhi",
+      "fetchedAt": "2026-04-25T15:31:53.798Z",
+      "error": null
+    },
+    {
+      "id": "mahadbt",
+      "label": "MahaDBT",
+      "url": "https://mahadbt.maharashtra.gov.in/",
+      "ok": true,
+      "status": 200,
+      "title": "MahaDBT",
+      "fetchedAt": "2026-04-25T15:31:53.800Z",
+      "error": null
+    },
+    {
+      "id": "mahaswayam",
+      "label": "MahaSwayam",
+      "url": "https://rojgar.mahaswayam.gov.in/",
+      "ok": true,
+      "status": 200,
+      "title": "Mahaswayam",
+      "fetchedAt": "2026-04-25T15:31:53.802Z",
+      "error": null
+    }
+  ],
+  "discoveries": [
+    {
+      "id": "SCOUT-001",
+      "kind": "updated",
+      "title": "myScheme",
+      "summary": "Scout reviewed myScheme and captured a fresh official snapshot. Review the linked source for the latest scheme or policy details before acting.",
+      "sourceLabel": "myScheme",
+      "sourceUrl": "https://www.myscheme.gov.in/",
+      "category": "Government Schemes",
+      "state": "All States",
+      "confidence": "medium"
+    },
+    {
+      "id": "SCOUT-002",
+      "kind": "monitoring",
+      "title": "NSP : National Scholarship Portal",
+      "summary": "Scout reviewed National Scholarship Portal and captured a fresh official snapshot. Review the linked source for the latest scheme or policy details before acting.",
+      "sourceLabel": "National Scholarship Portal",
+      "sourceUrl": "https://scholarships.gov.in/",
+      "category": "Scholarships",
+      "state": "All States",
+      "confidence": "medium"
+    },
+    {
+      "id": "SCOUT-003",
+      "kind": "monitoring",
+      "title": "PM-Kisan Samman Nidhi",
+      "summary": "Scout reviewed PM-Kisan and captured a fresh official snapshot. Review the linked source for the latest scheme or policy details before acting.",
+      "sourceLabel": "PM-Kisan",
+      "sourceUrl": "https://pmkisan.gov.in/",
+      "category": "Agriculture",
+      "state": "All States",
+      "confidence": "medium"
+    }
+  ],
+  "logs": [
+    "[AGENT] AI summarization fallback triggered: Failed after 3 attempts. Last error: Cannot connect to API: Client network socket disconnected before secure TLS connection was established.",
+    "[AGENT] Starting background cycle (worker-interval)...",
+    "[AGENT] Captured myScheme: myScheme.",
+    "[AGENT] Captured National Scholarship Portal: NSP : National Scholarship Portal.",
+    "[AGENT] Captured PM-Kisan: PM-Kisan Samman Nidhi.",
+    "[AGENT] Captured MahaDBT: MahaDBT.",
+    "[AGENT] Captured MahaSwayam: Mahaswayam.",
+    "[AGENT] Stored fallback insights and refreshed local memory."
+  ]
+}

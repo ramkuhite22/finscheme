@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scheme Search Results — FinScheme | Your Personalized Benefits List</title>
+  <meta name="description" content="Explore your personalized list of government schemes. View benefits, eligibility requirements, and application steps for 1,000+ Indian schemes.">
+  <link rel="stylesheet" href="../css/theme.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/theme.js"></script>
+  <script src="../js/supabase-init.js" defer></script>
+
+  <meta property="og:title" content="FinScheme — Personalized Scheme Search Results">
+  <meta property="og:description" content="Discover government schemes tailored to your profile. Fast, free, and transparent.">
+  <meta property="og:image" content="../assets/brand/og-image.png">
+  <meta property="og:url" content="https://finscheme.com/find">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="../assets/brand/logo.png">
+
+</head>
+<body style="background: var(--bg-main);" class="loading">
+  <div id="global-loader">
+    <div id="loader-canvas"></div>
+    <div class="loader-text">
+        <span>Curating Best Schemes</span>
+        <span class="loader-dot">.</span>
+        <span class="loader-dot">.</span>
+        <span class="loader-dot">.</span>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="nav" style="height: 100%;">
+      <a href="../index.html" class="brand">
+        <img src="../assets/brand/logo.png" alt="FinScheme Logo" loading="lazy">
+        <span>FinScheme</span>
+      </a>
+      <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="find.html">Schemes</a>
+        <a href="guide.html">Guide</a>
+        <a href="tools.html">Tools</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="nav-actions" id="user-auth">
+        <button class="btn btn-outline mobile-menu-btn" id="mobileMenuBtn" style="padding: 0.5rem; border-color: var(--border); border-radius: 8px;"><i data-lucide="menu"></i></button>
+
+        <button class="btn btn-primary btn-shimmer magnetic-target" id="login-btn" style="border-radius: var(--radius-pill); padding: 0.5rem 1.5rem;">Login</button>
+        <div id="user-button"></div>
+      </div>
+    </div>
+  </header>
+
+
+  <div class="dashboard-wrap fade-in">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <a href="../index.html" class="sidebar-link">
+        <i data-lucide="layout-dashboard"></i> Dashboard
+      </a>
+      <a href="find.html" class="sidebar-link active">
+        <i data-lucide="search"></i> Search Schemes
+      </a>
+      <a href="information.html" class="sidebar-link">
+        <i data-lucide="file-text"></i> My Applications
+      </a>
+      <a href="../index.html" class="sidebar-link">
+        <i data-lucide="bookmark"></i> Saved Schemes
+      </a>
+      <a href="documents.html" class="sidebar-link">
+        <i data-lucide="folder"></i> Documents
+      </a>
+      <div style="margin-top: auto;">
+        <a href="about.html" class="sidebar-link">
+          <i data-lucide="user"></i> Profile
+        </a>
+        <a href="contact.html" class="sidebar-link">
+          <i data-lucide="help-circle"></i> Help & Support
+        </a>
+        <a href="login.html" class="sidebar-link">
+          <i data-lucide="log-out"></i> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Filter Sidebar -->
+    <aside class="filter-sidebar glass">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h3 style="font-size: 1rem; font-weight: 700;">Filters</h3>
+        <button id="clearBtn" style="background: none; border: none; color: var(--primary); font-size: 0.75rem; font-weight: 600; cursor: pointer;">Clear All</button>
+      </div>
+
+      <form id="filterForm">
+        <div class="filter-group">
+          <label>Age</label>
+          <select id="ageRange">
+            <option value="ALL">All Ages</option>
+            <option value="18-30">18-30 Years</option>
+            <option value="31-50">31-50 Years</option>
+            <option value="50+">50+ Years</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Income</label>
+          <select id="incomeRange">
+            <option value="ALL">All Incomes</option>
+            <option value="0-250000">Up to ₹2,50,000</option>
+            <option value="250001-500000">₹2,50,001 - ₹5,00,000</option>
+            <option value="500001+">Above ₹5,00,000</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Category</label>
+          <select id="categorySelect">
+            <option value="ALL">All Categories</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Occupation</label>
+          <select id="occupationSelect">
+            <option value="ALL">Select Occupation</option>
+            <option value="Student">Student</option>
+            <option value="Farmer">Farmer</option>
+            <option value="Business">Business Owner</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>State</label>
+          <select id="stateSelect">
+            <option value="ALL">All States</option>
+            <option value="Maharashtra">Maharashtra</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Karnataka">Karnataka</option>
+            <option value="Tamil Nadu">Tamil Nadu</option>
+            <option value="Uttar Pradesh">Uttar Pradesh</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-shimmer" style="width: 100%;">Apply Filters</button>
+      </form>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content dot-pattern">
+      <div class="content-header">
+        <div class="content-title">
+          <h2>Verified <span class="shiny-text">Schemes</span></h2>
+          <p id="resultCount">Showing 0 schemes for you</p>
+        </div>
+        <div style="flex: 1; max-width: 400px; margin: 0 2rem;">
+          <div class="search-field spotlight-card" style="position: relative;">
+            <i data-lucide="search" style="position: absolute; left: 1.25rem; top: 50%; transform: translateY(-50%); width: 18px; color: var(--primary);"></i>
+            <input type="text" id="searchInput" placeholder="Search schemes, benefits, or keywords..." style="padding-left: 3.5rem; width: 100%; border-radius: 999px; background: white; height: 48px;">
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <span style="font-size: 0.875rem; color: var(--text-muted);">Sort by:</span>
+          <select style="padding: 0.5rem; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.875rem;">
+            <option>Relevance</option>
+            <option>Date Added</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="results" class="results-grid reveal-container">
+        <!-- Result Cards will be injected here with .reveal-item class -->
+      </div>
+    </main>
+  </div>
+
+  
+  <script src="../js/cookie-consent.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+
+    function getSchemeFile() {
+      const lang = (localStorage.getItem("finscheme_lang") || "en").toLowerCase();
+      if (lang === "hi") return "../data/schemes_hi.json";
+      if (lang === "mr") return "../data/schemes_mr.json";
+      return "../data/schemes_en.json";
+    }
+
+    const filterForm = document.getElementById("filterForm");
+    const resultsGrid = document.getElementById("results");
+    const resultCount = document.getElementById("resultCount");
+    const categorySelect = document.getElementById("categorySelect");
+    const ageSelect = document.getElementById("ageRange");
+    const incomeSelect = document.getElementById("incomeRange");
+    const occupationSelect = document.getElementById("occupationSelect");
+    const stateSelect = document.getElementById("stateSelect");
+    const searchInput = document.getElementById("searchInput");
+
+    let schemes = [];
+
+    async function loadSchemes() {
+      const source = getSchemeFile();
+      try {
+        const res = await fetch(source);
+        if(!res.ok) throw new Error("Load failed");
+        schemes = await res.json();
+        
+        populateCategories();
+        
+        // Handle URL Parameters
+        const params = new URLSearchParams(window.location.search);
+        const q = params.get('q');
+        const cat = params.get('cat');
+        const age = params.get('age');
+        const income = params.get('income');
+        const state = params.get('state');
+        const occupation = params.get('occupation');
+
+        if(cat) categorySelect.value = cat;
+        if(age) ageSelect.value = age;
+        if(income) incomeSelect.value = income;
+        if(state) stateSelect.value = state;
+        if(occupation) occupationSelect.value = occupation;
+        if(q) searchInput.value = q;
+        
+        applyFilters();
+      } catch (err) {
+        resultsGrid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: var(--text-muted);'>Failed to load schemes. Please try again later.</p>";
+      }
+    }
+
+    function populateCategories() {
+      const categories = Array.from(new Set(schemes.map(s => s.category || "Other"))).sort();
+      categories.forEach(cat => {
+        const opt = document.createElement("option");
+        opt.value = cat;
+        opt.textContent = cat;
+        categorySelect.appendChild(opt);
+      });
+    }
+
+    function renderSchemes(list) {
+      resultsGrid.innerHTML = "";
+      resultCount.textContent = `Showing ${list.length} schemes for you`;
+      
+      if(list.length === 0) {
+        resultsGrid.innerHTML = `
+          <div style='grid-column: 1/-1; text-align: center; padding: 4rem; display: flex; flex-direction: column; align-items: center; gap: 1rem;'>
+            <i data-lucide="search-x" style="width: 48px; height: 48px; color: var(--text-muted); opacity: 0.5;"></i>
+            <h3 style="color: var(--text-main); font-size: 1.25rem;">No schemes match your details. Try changing income or work.</h3>
+            <p style="color: var(--text-muted);">You’re close. Small changes can help. Remove one detail and try again.</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      const isLoggedIn = window.Clerk && window.Clerk.user;
+      
+      list.forEach(s => {
+        const isBookmarked = window.savedSchemesSet && window.savedSchemesSet.has(s.name);
+        const bookmarkColor = isBookmarked ? 'var(--primary)' : 'var(--text-muted)';
+        const bookmarkFill = isBookmarked ? 'fill: var(--primary);' : '';
+        const card = document.createElement("div");
+        card.className = "scheme-card-premium card-hover spotlight-card reveal-item clay border-beam";
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+               <div class="scheme-tag" style="background: rgba(16, 185, 129, 0.1); color: var(--success); font-weight: 700; border: 1px solid rgba(16,185,129,0.3);"><i data-lucide="check-circle-2" style="width: 14px; display: inline-block; vertical-align: text-bottom; margin-right: 2px;"></i> Govt Verified</div>
+               <div class="scheme-tag" style="background: var(--bg-card); border: 1px solid var(--border);">${s.category || "General"}</div>
+            </div>
+            <i data-lucide="bookmark" class="bookmark-btn" data-scheme-name="${s.name}" data-category="${s.category || 'General'}" style="width: 20px; color: ${bookmarkColor}; ${bookmarkFill} cursor: pointer;"></i>
+          </div>
+          
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.75rem; line-height: 1.3;">${s.name}</h3>
+          
+          <div style="background: rgba(245, 158, 11, 0.08); border-left: 3px solid #f59e0b; padding: 0.6rem 0.75rem; margin-bottom: 1rem; border-radius: 0 8px 8px 0;">
+            <p style="font-size: 0.8rem; font-weight: 800; color: #b45309; margin: 0; display: flex; align-items: center; gap: 4px; text-transform: uppercase;"><i data-lucide="banknote" style="width: 14px;"></i> Key Benefit</p>
+            <p style="font-size: 0.9rem; color: var(--text-main); margin: 0; margin-top: 4px;"><strong>₹ Financial Support</strong> & Subsidies for eligible applicants.</p>
+          </div>
+
+          <p style="font-size: 0.9rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1rem;">${s.eligibility ? (s.eligibility.description || "Simplifying access to this essential government initiative.") : "Simplifying access to this essential government initiative."}</p>
+          
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: auto; margin-bottom: 1.5rem; border-top: 1px dashed var(--border-glass); padding-top: 1rem;">
+             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem;">
+               <span style="color: var(--text-muted); display: flex; align-items: center; gap: 4px;"><i data-lucide="calendar" style="width: 12px;"></i> Last Updated: <strong>Recent</strong></span>
+               <span style="color: var(--danger); font-weight: 700; display: flex; align-items: center; gap: 4px; background: rgba(239, 68, 68, 0.1); padding: 2px 8px; border-radius: 99px;"><i data-lucide="clock" style="width: 12px;"></i> Act Fast</span>
+             </div>
+             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+               <span class="scheme-tag" style="background: #f8fafc; color: var(--text-muted); border: 1px solid var(--border);">1. Check</span>
+               <span class="scheme-tag" style="background: #f8fafc; color: var(--text-muted); border: 1px solid var(--border);">2. Collect Docs</span>
+               <span class="scheme-tag" style="background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; font-weight: 600;">3. Apply Online</span>
+             </div>
+          </div>
+
+          <div class="scheme-footer" style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 0.75rem; border-top: none; padding-top: 0;">
+            <button onclick="getAISummary('${s.name}')" class="btn btn-outline ai-summary-btn" style="padding: 0.75rem 0.5rem; font-size: 0.85rem; text-align: center; border-radius: 12px; border-width: 2px;">AI Summary</button>
+            ${isLoggedIn 
+              ? `<a href="${s.applyLink || '#'}" target="_blank" class="btn btn-primary btn-shimmer magnetic-target" style="padding: 0.75rem 1rem; font-size: 0.9rem; border-radius: 12px; display: flex; justify-content: center; align-items: center; gap: 6px;">Apply Now <i data-lucide="arrow-up-right" style="width: 16px;"></i></a>`
+              : `<button class="btn btn-primary magnetic-target" style="padding: 0.75rem 1rem; font-size: 0.9rem; border-radius: 12px; display: flex; justify-content: center; align-items: center; gap: 6px;" onclick="window.location.href='login.html'">Login to Apply</button>`
+            }
+          </div>
+        `;
+        resultsGrid.appendChild(card);
+      });
+      lucide.createIcons();
+      
+      // Trigger reveal for newly injected items
+      const container = document.querySelector('.reveal-container');
+      const items = container.querySelectorAll('.reveal-item:not(.revealed)');
+      items.forEach((item, index) => {
+          setTimeout(() => item.classList.add('revealed'), index * 50);
+      });
+    }
+
+    // Bookmarking event delegation listener
+    window.savedSchemesSet = new Set();
+    resultsGrid.addEventListener('click', async (e) => {
+      const bookmarkBtn = e.target.closest('.bookmark-btn');
+      if (!bookmarkBtn) return;
+      
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (!window.supabaseUser) {
+        alert("Please log in to save schemes.");
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      const schemeName = bookmarkBtn.dataset.schemeName;
+      const category = bookmarkBtn.dataset.category;
+      const isBookmarked = window.savedSchemesSet && window.savedSchemesSet.has(schemeName);
+      
+      try {
+        if (isBookmarked) {
+          const { error } = await window.supabaseClient
+            .from('saved_schemes')
+            .delete()
+            .eq('user_id', window.supabaseUser.id)
+            .eq('scheme_name', schemeName);
+            
+          if (error) throw error;
+          window.savedSchemesSet.delete(schemeName);
+        } else {
+          const { error } = await window.supabaseClient
+            .from('saved_schemes')
+            .insert({
+              user_id: window.supabaseUser.id,
+              scheme_name: schemeName,
+              category: category
+            });
+            
+          if (error) throw error;
+          window.savedSchemesSet.add(schemeName);
+        }
+        applyFilters();
+      } catch (err) {
+        console.error("Bookmark toggle failed:", err);
+      }
+    });
+
+    async function fetchSavedSchemes() {
+      if (window.supabaseClient && window.supabaseUser) {
+        try {
+          const { data, error } = await window.supabaseClient
+            .from('saved_schemes')
+            .select('scheme_name')
+            .eq('user_id', window.supabaseUser.id);
+          
+          if (error) throw error;
+          window.savedSchemesSet = new Set(data.map(item => item.scheme_name));
+        } catch (e) {
+          console.error("Failed to load saved schemes:", e);
+        }
+      } else {
+        window.savedSchemesSet = new Set();
+      }
+    }
+
+    // Handle authentication state change
+    window.addEventListener('clerk-ready', async () => {
+      await fetchSavedSchemes();
+      applyFilters(); // Re-render with correct buttons and bookmark states
+    });
+
+    function applyFilters() {
+      const cat = categorySelect.value;
+      const age = ageSelect.value;
+      const income = incomeSelect.value;
+      const occupation = occupationSelect.value;
+      const state = stateSelect.value;
+      const q = searchInput.value.toLowerCase();
+      
+      let filtered = schemes;
+
+      if(cat !== "ALL") filtered = filtered.filter(s => s.category === cat);
+      if(state !== "ALL") {
+        filtered = filtered.filter(s => {
+          const scope = (s.eligibility?.description || "").toLowerCase();
+          return scope.includes(`scope: ${state.toLowerCase()}`) || scope.includes("scope: central");
+        });
+      }
+      if(occupation !== "ALL") {
+        filtered = filtered.filter(s =>
+          s.category === occupation ||
+          s.name.toLowerCase().includes(occupation.toLowerCase())
+        );
+      }
+      if(q) {
+        filtered = filtered.filter(s => 
+          s.name.toLowerCase().includes(q) || 
+          (s.category && s.category.toLowerCase().includes(q)) ||
+          ((s.eligibility?.description || "").toLowerCase().includes(q))
+        );
+      }
+
+      // Simple filter mock-up for age and income since dataset structure varies
+      // In a real app we would parse s.eligibility fields
+      
+      renderSchemes(filtered);
+    }
+
+    filterForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      applyFilters();
+    });
+
+    searchInput.addEventListener("input", () => {
+      applyFilters();
+    });
+
+    document.getElementById("clearBtn").addEventListener("click", () => {
+      filterForm.reset();
+      applyFilters();
+    });
+
+    loadSchemes();
+  </script>
+  <!-- AI Summary Modal -->
+  <div id="aiSummaryModal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div class="glass spotlight-card clay" style="background: white; width: min(500px, 100%); padding: 2rem; border-radius: 24px; position: relative;">
+      <button onclick="document.getElementById('aiSummaryModal').style.display = 'none'" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+         <div class="agentic-indicator" style="width: 10px; height: 10px;"></div>
+         <h3 id="summaryTitle" style="font-weight: 800; font-size: 1.1rem; color: var(--primary);">AI SCHEME SUMMARY</h3>
+      </div>
+      <div id="summaryContent" style="font-size: 0.95rem; line-height: 1.6; color: var(--dark); min-height: 100px;">
+        Generating executive summary...
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function getAISummary(schemeName) {
+      const modal = document.getElementById('aiSummaryModal');
+      const content = document.getElementById('summaryContent');
+      const title = document.getElementById('summaryTitle');
+      
+      modal.style.display = 'flex';
+      title.textContent = `${schemeName} — AI Insight`;
+      content.innerHTML = '<div class="loader-dots"><span>.</span><span>.</span><span>.</span></div>';
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            messages: [{ role: 'user', content: `Provide a 2-sentence executive summary of the government scheme: ${schemeName}. Focus on who it is for and the primary benefit.` }] 
+          })
+        });
+
+        if (!response.ok) throw new Error('AI Error');
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        content.textContent = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value, { stream: true });
+          const lines = chunk.split('\n');
+          for (const line of lines) {
+            if (line.startsWith('0:')) {
+              const text = JSON.parse(line.substring(2));
+              content.textContent += text;
+            }
+          }
+        }
+      } catch (err) {
+        content.textContent = "Failed to generate summary. Please check the official source for details.";
+      }
+    }
+  </script>
+
+  <script src="../js/curve-loader.js"></script>
+  <script src="../js/interactions.js"></script>
+</body>
+</html>
+
+

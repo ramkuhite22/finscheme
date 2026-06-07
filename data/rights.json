@@ -1,0 +1,195 @@
+[
+  {
+    "id": "R001",
+    "title": "Agency Rights (LIC)",
+    "category": "Career & Economic Empowerment",
+    "occupation": [
+      "Insurance Agent",
+      "Job Seeker",
+      "Self-Employed",
+      "Business Owner"
+    ],
+    "state": [
+      "All States"
+    ],
+    "age": {
+      "min": 18,
+      "max": 120
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "Adults who meet LIC's basic onboarding criteria can work as agents and pursue self-employment through insurance distribution.",
+    "benefit": "Supports flexible work, income generation, and professional autonomy.",
+    "sourcePage": "pages/rights.html"
+  },
+  {
+    "id": "R002",
+    "title": "Hereditary Commission",
+    "category": "Career & Economic Empowerment",
+    "occupation": [
+      "Insurance Agent",
+      "Self-Employed"
+    ],
+    "state": [
+      "All States"
+    ],
+    "age": {
+      "min": 18,
+      "max": 120
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "Renewal commissions attached to eligible LIC agency work can continue in favor of legal heirs under the applicable agency framework.",
+    "benefit": "Adds a family-security dimension to long-term agency work.",
+    "sourcePage": "pages/rights.html"
+  },
+  {
+    "id": "R003",
+    "title": "Agency Perks and Advances",
+    "category": "Career & Economic Empowerment",
+    "occupation": [
+      "Insurance Agent",
+      "Self-Employed",
+      "Business Owner"
+    ],
+    "state": [
+      "All States"
+    ],
+    "age": {
+      "min": 18,
+      "max": 120
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "Eligible LIC agents may access benefits such as interest-free advances, insurance-linked support, and agency-related perks subject to policy conditions.",
+    "benefit": "Can reduce the setup burden for agents building a practice.",
+    "sourcePage": "pages/rights.html"
+  },
+  {
+    "id": "R004",
+    "title": "Free Look Period for Life Insurance",
+    "category": "Insurance & Financial Rights",
+    "occupation": [
+      "Citizen",
+      "Employee",
+      "Self-Employed",
+      "Business Owner",
+      "Farmer",
+      "Student"
+    ],
+    "state": [
+      "All States"
+    ],
+    "age": {
+      "min": 18,
+      "max": 120
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "Policyholders generally get a post-receipt review window to examine a life insurance policy and exit under the insurer's free-look rules if they disagree with the terms.",
+    "benefit": "Helps consumers avoid staying locked into an unsuitable policy without review.",
+    "sourcePage": "pages/rights.html"
+  },
+  {
+    "id": "R005",
+    "title": "Mukhyamantri Yojana Doot Opportunity",
+    "category": "Government Employment Schemes",
+    "occupation": [
+      "Job Seeker",
+      "Graduate",
+      "Employee"
+    ],
+    "state": [
+      "Maharashtra"
+    ],
+    "age": {
+      "min": 18,
+      "max": 35
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "A Maharashtra opportunity aimed at outreach and awareness work related to welfare programmes at the grassroots level.",
+    "benefit": "Relevant for young applicants looking for state-linked public outreach work.",
+    "sourcePage": "pages/rights.html"
+  },
+  {
+    "id": "R006",
+    "title": "Yojana Doot Eligibility Rights",
+    "category": "Government Employment Schemes",
+    "occupation": [
+      "Job Seeker",
+      "Graduate"
+    ],
+    "state": [
+      "Maharashtra"
+    ],
+    "age": {
+      "min": 18,
+      "max": 35
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "The current seed entry reflects the age, residency, device, and education expectations described on the existing rights page for Yojana Doot applicants.",
+    "benefit": "Makes it easier to pre-check whether the role is worth exploring before opening the official portal.",
+    "sourcePage": "pages/rights.html"
+  },
+  {
+    "id": "R007",
+    "title": "Yojana Doot Application Guidance",
+    "category": "Government Employment Schemes",
+    "occupation": [
+      "Job Seeker",
+      "Graduate"
+    ],
+    "state": [
+      "Maharashtra"
+    ],
+    "age": {
+      "min": 18,
+      "max": 35
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "This seed right captures the current rights-page guidance that the application flow is online and document-driven.",
+    "benefit": "Useful for turning static legal-awareness content into a filterable, action-oriented record.",
+    "sourcePage": "pages/rights.html"
+  },
+  {
+    "id": "R008",
+    "title": "Yojana Doot Contract Transparency",
+    "category": "Government Employment Schemes",
+    "occupation": [
+      "Job Seeker",
+      "Graduate",
+      "Employee"
+    ],
+    "state": [
+      "Maharashtra"
+    ],
+    "age": {
+      "min": 18,
+      "max": 35
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "The current rights-page content notes that the role is fixed-term and should be understood as a temporary opportunity rather than a permanent government appointment.",
+    "benefit": "Helps applicants calibrate expectations before applying.",
+    "sourcePage": "pages/rights.html"
+  }
+]

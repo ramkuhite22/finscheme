@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Library &mdash; FinScheme</title>
+  <meta name="description" content="Browse 50+ official government PDFs, scheme compendiums, and legal reference documents. Filter by topic and download instantly.">
+  <link rel="stylesheet" href="../css/theme.css">
+  <script src="../js/theme.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-init.js" defer></script>
+
+  <meta property="og:title" content="Document Library — FinScheme">
+  <meta property="og:description" content="Browse 50+ official government PDFs, scheme compendiums, and legal reference documents.">
+  <meta property="og:image" content="../assets/brand/logo.png">
+  <meta property="og:url" content="https://finscheme.com">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="../assets/brand/logo.png">
+
+</head>
+<body class="loading">
+  <div id="global-loader"><div id="loader-canvas"></div><div class="loader-text"><span>Loading Documents</span><span class="loader-dot">.</span><span class="loader-dot">.</span><span class="loader-dot">.</span></div></div>
+  <div class="scroll-progress" id="scrollBar"></div>
+  <header class="topbar">
+    <div class="nav" style="height: 100%;">
+      <a href="../index.html" class="brand"><img src="../assets/brand/logo.png" alt="FinScheme Logo" loading="lazy"><span>FinScheme</span></a>
+      <nav class="nav-links"><a href="../index.html">Home</a><a href="find.html">Schemes</a><a href="guide.html">Guide</a><a href="tools.html">Tools</a><a href="about.html">About</a></nav>
+      <div class="nav-actions" id="user-auth">
+        <button class="btn btn-outline mobile-menu-btn" id="mobileMenuBtn" style="padding: 0.5rem; border-color: var(--border); border-radius: 8px;"><i data-lucide="menu"></i></button>
+
+        <button class="btn btn-primary btn-shimmer magnetic-target" id="login-btn" style="border-radius: var(--radius-pill); padding: 0.5rem 1.5rem;">Login</button>
+        <div id="user-button"></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero dot-pattern">
+      <div class="blur-fade">
+        <span class="page-badge" style="margin-bottom: 1rem;">Reference Library</span>
+        <h1>Document <span class="shiny-text">Library</span></h1>
+        <p>Browse official PDFs available in this folder. Search by title or topic, and jump straight to the source file.</p>
+      </div>
+      <div class="page-hero-card">
+        <img src="../assets/photos/rural-field-unsplash.jpg" alt="Rural landscape" loading="lazy">
+      </div>
+    </section>
+
+    <section class="page-section">
+      <div class="doc-card" style="margin-bottom: 1.5rem;">
+        <strong>Finscheme Master Resource Guide (2026)</strong>
+        <span>Local guide document with checklists, schemes, and process tips.</span>
+        <div class="doc-actions">
+          <a class="primary" href="../notes/Finschem guide.docx" download>Download Guide</a>
+          <a href="guide.html">Open Guide Page</a>
+        </div>
+      </div>
+
+      <h2 class="page-section-title">All <span>Documents</span></h2>
+      <p class="page-section-sub">Systematic HTML pages generated from all PDFs in the workspace.</p>
+      <div class="page-controls">
+        <input id="searchInput" type="text" placeholder="Search by title, summary, or filename">
+        <select id="topicSelect"><option value="">Filter by topic</option></select>
+        <select id="sortSelect">
+          <option value="title-asc">Sort: Title (A-Z)</option>
+          <option value="title-desc">Sort: Title (Z-A)</option>
+          <option value="pages-desc">Sort: Most Pages</option>
+          <option value="pages-asc">Sort: Fewest Pages</option>
+        </select>
+      </div>
+      <div id="docGrid" class="doc-grid"></div>
+    </section>
+
+    <section class="page-section">
+      <h2 class="page-section-title">Official <span>References</span></h2>
+      <p class="page-section-sub">Cross-check documents and notices on official portals.</p>
+      <div class="resource-grid">
+        <div class="resource-card spotlight-card clay"><h4>National Portal of India</h4><p>Official government scheme directory.</p><a href="https://www.india.gov.in/my-government/schemes" target="_blank" rel="noopener">Open official site &rarr;</a></div>
+        <div class="resource-card spotlight-card clay"><h4>myScheme</h4><p>Official scheme discovery and eligibility.</p><a href="https://www.myscheme.gov.in/" target="_blank" rel="noopener">Open official site &rarr;</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer grid-pattern">
+    <div class="footer-content" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem;">
+      <div class="footer-brand"><a href="../index.html" class="brand" style="margin-bottom: 1.5rem;"><img src="../assets/brand/logo.png" alt="FinScheme Logo" loading="lazy"><span>FinScheme</span></a><p style="color: var(--text-muted); font-size: 0.9375rem; line-height: 1.6; max-width: 320px;">Empowering citizens by simplifying access to government schemes.</p></div>
+      <div class="footer-links-group"><h4 style="margin-bottom: 1.5rem; font-weight: 700;">Platform</h4><div style="display: flex; flex-direction: column; gap: 0.75rem;"><a href="find.html">Search Schemes</a><a href="guide.html">Guide</a><a href="categories.html">Categories</a></div></div>
+      <div class="footer-links-group"><h4 style="margin-bottom: 1.5rem; font-weight: 700;">Company</h4><div style="display: flex; flex-direction: column; gap: 0.75rem;"><a href="about.html">About Us</a><a href="tools.html">Tools</a><a href="links.html">Links</a></div></div>
+      <div class="footer-links-group"><h4 style="margin-bottom: 1.5rem; font-weight: 700;">Legal</h4><div style="display: flex; flex-direction: column; gap: 0.75rem;"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="cookie-policy.html">Cookie Policy</a></div></div>
+    </div>
+    <div class="footer-bottom"><div style="display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto; width: 100%;"><p>&copy; 2026 FinScheme. Built with trust for every Indian.</p><div style="display: flex; gap: 1.5rem;"><i data-lucide="twitter" style="width: 20px; cursor: pointer;"></i><i data-lucide="linkedin" style="width: 20px; cursor: pointer;"></i><i data-lucide="github" style="width: 20px; cursor: pointer;"></i></div></div></div>
+  </footer>
+
+  
+  <div id="cookie-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: white; padding: 1rem; text-align: center; z-index: 9999; display: flex; justify-content: center; gap: 1rem; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem;">
+    <span>We use cookies to improve your experience. By continuing, you agree to our <a href="privacy.html" style="color: var(--primary); text-decoration: underline;">Privacy Policy</a>.</span>
+    <button onclick="document.getElementById('cookie-banner').style.display='none'" class="btn btn-primary btn-sm" style="border-radius: 8px; padding: 0.5rem 1rem;">Accept All</button>
+  </div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+    const docGrid = document.getElementById("docGrid");
+    const searchInput = document.getElementById("searchInput");
+    const topicSelect = document.getElementById("topicSelect");
+    const sortSelect = document.getElementById("sortSelect");
+
+    function tagHTML(tags) {
+      return tags.map(t => "<span class='page-tag'>" + t + "</span>").join(" ");
+    }
+
+    function renderDocs(list) {
+      docGrid.innerHTML = "";
+      if (!list.length) {
+        docGrid.innerHTML = '<div class="page-empty">No documents match your filters.</div>';
+        return;
+      }
+      list.forEach(doc => {
+        const pages = doc.pages ? doc.pages + " pages" : "Pages: --";
+        const size = doc.size_kb ? doc.size_kb + " KB" : "Size: --";
+        const summary = doc.summary || "Summary unavailable. Open to view the document.";
+        const card = document.createElement("article");
+        card.className = "doc-card spotlight-card";
+        card.innerHTML = "<h3>" + doc.title + "</h3><div class='doc-meta'><span>" + pages + "</span><span>" + size + "</span><span>" + doc.file + "</span></div><p style='font-size:0.875rem;color:var(--text-muted);line-height:1.5'>" + summary + "</p>" + (doc.topics && doc.topics.length ? ("<div>" + tagHTML(doc.topics) + "</div>") : "") + "<div class='doc-actions'><a class='primary' href='" + doc.html + "' target='_blank' rel='noopener'>Open Document</a></div>";
+        docGrid.appendChild(card);
+      });
+    }
+
+    function applyFilters(docs) {
+      const q = searchInput.value.trim().toLowerCase();
+      const topic = topicSelect.value;
+      let list = docs.slice();
+      if (q) { list = list.filter(d => { const hay = (d.title + " " + (d.summary || "") + " " + d.file).toLowerCase(); return hay.includes(q); }); }
+      if (topic) { list = list.filter(d => Array.isArray(d.topics) && d.topics.includes(topic)); }
+      const mode = sortSelect.value;
+      if (mode === "title-desc") list.sort((a, b) => b.title.localeCompare(a.title));
+      else if (mode === "pages-desc") list.sort((a, b) => (b.pages || 0) - (a.pages || 0) || a.title.localeCompare(b.title));
+      else if (mode === "pages-asc") list.sort((a, b) => (a.pages || 0) - (b.pages || 0) || a.title.localeCompare(b.title));
+      else list.sort((a, b) => a.title.localeCompare(b.title));
+      return list;
+    }
+
+    async function loadDocs() {
+      try {
+        const res = await fetch("../data/docs_index.json");
+        if (!res.ok) throw new Error("Failed to load");
+        const docs = await res.json();
+        const topics = Array.from(new Set(docs.flatMap(d => d.topics || []))).sort();
+        topicSelect.innerHTML = "<option value=''>Filter by topic</option>" + topics.map(t => "<option value='" + t + "'>" + t + "</option>").join("");
+        const render = () => renderDocs(applyFilters(docs));
+        searchInput.addEventListener("input", render);
+        topicSelect.addEventListener("change", render);
+        sortSelect.addEventListener("change", render);
+        render();
+      } catch (err) {
+        docGrid.innerHTML = '<div class="page-empty">Unable to load document index.</div>';
+      }
+    }
+    loadDocs();
+  </script>
+  <script src="../js/curve-loader.js"></script>
+  <script src="../js/interactions.js"></script>
+</body>
+</html>
+
+

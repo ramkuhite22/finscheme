@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - FinScheme</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-init.js" defer></script>
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .auth-container {
+      width: 100%;
+      max-width: 440px;
+      animation: fadeIn 0.8s ease-out;
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .auth-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+    .auth-header p {
+      color: var(--text-muted);
+    }
+    .auth-form-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    [data-theme="dark"] .auth-form-card {
+      background: rgba(15, 23, 42, 0.8);
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+    .auth-error-alert {
+      display: none;
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+    .input-label {
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .text-link {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .text-link:hover {
+      color: #059669;
+    }
+  </style>
+
+  <meta property="og:title" content="FinScheme — Find the Right Government Schemes for You">
+  <meta property="og:description" content="Discover 1,000+ central & state government schemes. Check eligibility and apply with ease.">
+  <meta property="og:image" content="../assets/brand/logo.png">
+  <meta property="og:url" content="https://finscheme.com">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="../assets/brand/logo.png">
+
+</head>
+<body class="dot-pattern">
+  <div class="auth-page">
+    <div class="auth-container">
+      <div class="auth-header">
+        <a href="../index.html" class="brand" style="justify-content: center; margin-bottom: 2rem;">
+          <img src="../assets/brand/logo.png" alt="FinScheme Logo" style="height: 48px;" loading="lazy">
+          <span style="font-size: 1.75rem;">FinScheme</span>
+        </a>
+        <h1>Welcome Back</h1>
+        <p>Login to your account to manage your applications</p>
+      </div>
+
+      <form id="login-form" class="auth-form-card clay">
+        <div id="login-error" class="auth-error-alert"></div>
+
+        <div class="premium-input-group">
+          <label class="input-label" for="email">Email Address</label>
+          <input type="email" id="email" class="premium-input" placeholder="e.g. citizen@india.gov.in" required style="width: 100%; height: 48px;">
+        </div>
+
+        <div class="premium-input-group">
+          <label class="input-label" for="password">Password</label>
+          <input type="password" id="password" class="premium-input" placeholder="••••••••" required style="width: 100%; height: 48px;">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-shimmer" id="submit-btn" style="width: 100%; height: 48px; border-radius: 12px; font-weight: 600; display: flex; justify-content: center; align-items: center;">
+          Log In
+        </button>
+
+        <p style="text-align: center; font-size: 0.875rem; margin-top: 0.5rem; color: var(--text-muted);">
+          Don't have an account? <a href="signup.html" class="text-link">Create Account</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/cookie-consent.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      function checkSupabase() {
+        if (window.supabaseClient) {
+          initLoginForm();
+        } else {
+          setTimeout(checkSupabase, 50);
+        }
+      }
+      checkSupabase();
+
+      function initLoginForm() {
+        const form = document.getElementById('login-form');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const errorDiv = document.getElementById('login-error');
+        const submitBtn = document.getElementById('submit-btn');
+
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          errorDiv.style.display = 'none';
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Logging in...';
+
+          const email = emailInput.value.trim();
+          const password = passwordInput.value;
+
+          try {
+            const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+              email,
+              password
+            });
+
+            if (error) throw error;
+
+            window.location.href = '../index.html';
+          } catch (err) {
+            console.error(err);
+            errorDiv.textContent = err.message || 'Login failed. Please check your credentials.';
+            errorDiv.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Log In';
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

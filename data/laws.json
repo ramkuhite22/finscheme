@@ -1,0 +1,253 @@
+[
+  {
+    "id": "L001",
+    "title": "Right to Information Act, 2005",
+    "category": "Public Accountability",
+    "occupation": [
+      "Citizen",
+      "Student",
+      "Farmer",
+      "Business Owner",
+      "Employee",
+      "Job Seeker",
+      "Self-Employed"
+    ],
+    "state": [
+      "All States"
+    ],
+    "age": {
+      "min": 18,
+      "max": 120
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "Framework for citizens to seek information from public authorities, subject to the Act's procedures and exemptions.",
+    "lawType": "Central Act",
+    "source": "India Code"
+  },
+  {
+    "id": "L002",
+    "title": "Consumer Protection Act, 2019",
+    "category": "Consumer & Financial Protection",
+    "occupation": [
+      "Citizen",
+      "Student",
+      "Farmer",
+      "Business Owner",
+      "Employee",
+      "Self-Employed"
+    ],
+    "state": [
+      "All States"
+    ],
+    "age": {
+      "min": 18,
+      "max": 120
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "Consumer-protection framework covering dispute resolution, unfair trade practices, product liability, and related remedies.",
+    "lawType": "Central Act",
+    "source": "India Code"
+  },
+  {
+    "id": "L003",
+    "title": "Maternity Benefit Act, 1961",
+    "category": "Women & Family Protections",
+    "occupation": [
+      "Employee",
+      "Worker",
+      "Woman"
+    ],
+    "state": [
+      "All States"
+    ],
+    "age": {
+      "min": 18,
+      "max": 60
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "Framework governing maternity-related employment protections and benefits for eligible women in covered establishments.",
+    "lawType": "Central Act",
+    "source": "India Code"
+  },
+  {
+    "id": "L004",
+    "title": "Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013",
+    "category": "Women & Workplace Safety",
+    "occupation": [
+      "Employee",
+      "Worker",
+      "Student",
+      "Job Seeker",
+      "Woman"
+    ],
+    "state": [
+      "All States"
+    ],
+    "age": {
+      "min": 18,
+      "max": 120
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "Framework for prevention and redressal of workplace sexual-harassment complaints involving women in covered workplace settings.",
+    "lawType": "Central Act",
+    "source": "India Code"
+  },
+  {
+    "id": "L005",
+    "title": "Code on Wages, 2019",
+    "category": "Labour & Employment",
+    "occupation": [
+      "Employee",
+      "Worker",
+      "Job Seeker"
+    ],
+    "state": [
+      "All States"
+    ],
+    "age": {
+      "min": 18,
+      "max": 120
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "Wage-governance framework dealing with wage definitions, minimum wages, floor wages, and timely payment concepts.",
+    "lawType": "Central Act",
+    "source": "India Code"
+  },
+  {
+    "id": "L006",
+    "title": "Employees' Compensation Act, 1923",
+    "category": "Labour & Employment",
+    "occupation": [
+      "Employee",
+      "Worker"
+    ],
+    "state": [
+      "All States"
+    ],
+    "age": {
+      "min": 18,
+      "max": 120
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "Compensation framework for certain employment-related injury situations, subject to coverage and statutory conditions.",
+    "lawType": "Central Act",
+    "source": "India Code"
+  },
+  {
+    "id": "L007",
+    "title": "Right of Children to Free and Compulsory Education Act, 2009",
+    "category": "Education Rights",
+    "occupation": [
+      "Student",
+      "Parent",
+      "Citizen"
+    ],
+    "state": [
+      "All States"
+    ],
+    "age": {
+      "min": 6,
+      "max": 14
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "Education-rights framework focused on free and compulsory elementary education for children in the covered age bracket.",
+    "lawType": "Central Act",
+    "source": "India Code"
+  },
+  {
+    "id": "L008",
+    "title": "Rights of Persons with Disabilities Act, 2016",
+    "category": "Disability Rights",
+    "occupation": [
+      "Citizen",
+      "Student",
+      "Employee",
+      "Job Seeker",
+      "Self-Employed"
+    ],
+    "state": [
+      "All States"
+    ],
+    "age": {
+      "min": 0,
+      "max": 120
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "Disability-rights framework covering equality, non-discrimination, accessibility, and related obligations across public life.",
+    "lawType": "Central Act",
+    "source": "India Code"
+  },
+  {
+    "id": "L009",
+    "title": "IRDAI Policyholder Protection Regulations",
+    "category": "Insurance & Financial Rights",
+    "occupation": [
+      "Citizen",
+      "Employee",
+      "Business Owner",
+      "Self-Employed",
+      "Farmer"
+    ],
+    "state": [
+      "All States"
+    ],
+    "age": {
+      "min": 18,
+      "max": 120
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "Insurance-regulatory framework for policyholder-facing protections, including disclosure and servicing expectations.",
+    "lawType": "Regulation",
+    "source": "IRDAI / India Code ecosystem"
+  },
+  {
+    "id": "L010",
+    "title": "Mukhyamantri Yojana Doot Recruitment Guideline",
+    "category": "Government Employment Schemes",
+    "occupation": [
+      "Job Seeker",
+      "Graduate"
+    ],
+    "state": [
+      "Maharashtra"
+    ],
+    "age": {
+      "min": 18,
+      "max": 35
+    },
+    "income": {
+      "min": 0,
+      "max": null
+    },
+    "summary": "Starter state-specific legal-program record for Yojana Doot recruitment guidance and eligibility-aware discovery.",
+    "lawType": "State Guideline / Notification",
+    "source": "Seeded from existing FinScheme rights content"
+  }
+]

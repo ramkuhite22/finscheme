@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us — FinScheme | Bridging the Gap Between Policy and People</title>
+  <meta name="description" content="Learn about FinScheme — a modern discovery portal helping Indian citizens find, understand, and apply for government benefits with confidence.">
+  <link rel="stylesheet" href="../css/theme.css">
+  <script src="../js/theme.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-init.js" defer></script>
+  <meta property="og:title" content="About FinScheme — Empowering India's Citizens">
+  <meta property="og:description" content="Discover how FinScheme simplifies government benefits discovery for 1,000+ central and state schemes.">
+  <meta property="og:image" content="../assets/brand/og-image.png">
+  <meta property="og:url" content="https://finscheme.com/about">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="../assets/brand/logo.png">
+
+</head>
+<body class="loading">
+  <div id="global-loader">
+    <div id="loader-canvas"></div>
+    <div class="loader-text">
+      <span>Loading</span>
+      <span class="loader-dot">.</span>
+      <span class="loader-dot">.</span>
+      <span class="loader-dot">.</span>
+    </div>
+  </div>
+
+  <div class="scroll-progress" id="scrollBar"></div>
+  <header class="topbar">
+    <div class="nav" style="height: 100%;">
+      <a href="../index.html" class="brand">
+        <img src="../assets/brand/logo.png" alt="FinScheme Official Logo" loading="lazy">
+        <span>FinScheme</span>
+      </a>
+      <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="find.html">Schemes</a>
+        <a href="guide.html">Guide</a>
+        <a href="tools.html">Tools</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="nav-actions" id="user-auth">
+        <button class="btn btn-outline mobile-menu-btn" id="mobileMenuBtn" style="padding: 0.5rem; border-color: var(--border); border-radius: 8px;"><i data-lucide="menu"></i></button>
+
+        <button class="btn btn-primary btn-shimmer magnetic-target" id="login-btn" style="border-radius: var(--radius-pill); padding: 0.5rem 1.5rem;">Login</button>
+        <div id="user-button"></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section dot-pattern" style="padding-bottom: 40px;">
+      <div class="hero-container fade-in">
+        <div class="hero-content">
+          <h1>Empowering <span class="shiny-text">India's Citizens</span> through Discovery</h1>
+          <p>FinScheme is a modern discovery portal designed to help people find and apply for government benefits with confidence and clarity.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+             <div class="stat-card" style="box-shadow: none; border-color: var(--border);">
+               <div class="stat-info">
+                 <span id="schemeCount">1000+</span>
+                 <p>Schemes Indexed</p>
+               </div>
+             </div>
+             <div class="stat-card" style="box-shadow: none; border-color: var(--border);">
+               <div class="stat-info">
+                 <span>100%</span>
+                 <p>Verified Data</p>
+               </div>
+             </div>
+          </div>
+        </div>
+        <div class="hero-image-wrap">
+          <img src="../hero_man_laptop_1776253441697.png" alt="Indian citizen using FinScheme to discover government schemes" style="border-radius: var(--radius-lg);" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Mission -->
+    <section class="how-it-works fade-in">
+      <div class="section-header">
+        <h2>Our <span>Mission</span></h2>
+        <p>To reduce paperwork anxiety and ensure that every eligible citizen gets the support they deserve.</p>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem;">
+        <div class="page-card spotlight-card clay" style="text-align: center;">
+          <div class="step-icon" style="margin: 0 auto 1.5rem;"><i data-lucide="eye"></i></div>
+          <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Transparency</h4>
+          <p>We provide direct links to official portals, ensuring you always get the most accurate information from the source.</p>
+        </div>
+        <div class="page-card spotlight-card clay" style="text-align: center;">
+          <div class="step-icon" style="margin: 0 auto 1.5rem;"><i data-lucide="zap"></i></div>
+          <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Efficiency</h4>
+          <p>Our smart filtering system saves you hours of research by only showing schemes you are actually eligible for.</p>
+        </div>
+        <div class="page-card spotlight-card clay" style="text-align: center;">
+          <div class="step-icon" style="margin: 0 auto 1.5rem;"><i data-lucide="shield"></i></div>
+          <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Trust</h4>
+          <p>FinScheme is built around privacy and security, as a tool to empower citizens without compromise.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sources -->
+    <section class="trust-section" style="background: #ffffff;">
+      <div class="section-header">
+        <h2>Trusted <span>Sources</span></h2>
+        <p>We work with data from verified national and state portals.</p>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem;">
+        <div class="page-card spotlight-card clay" style="display: flex; align-items: center; gap: 1.5rem;">
+           <div class="stat-icon" style="flex-shrink: 0; background: #e0f2fe; color: #0284c7;"><i data-lucide="landmark"></i></div>
+           <div>
+             <h4 style="font-weight: 700;">myScheme Portal</h4>
+             <p style="font-size: 0.875rem; color: var(--text-muted);">National platform for discovering government schemes.</p>
+             <a href="https://www.myscheme.gov.in/" target="_blank" style="font-size: 0.875rem; color: var(--primary); font-weight: 600; text-decoration: none;">Visit Portal &rarr;</a>
+           </div>
+        </div>
+        <div class="page-card spotlight-card clay" style="display: flex; align-items: center; gap: 1.5rem;">
+           <div class="stat-icon" style="flex-shrink: 0; background: #fef3c7; color: #d97706;"><i data-lucide="globe"></i></div>
+           <div>
+             <h4 style="font-weight: 700;">Digital India</h4>
+             <p style="font-size: 0.875rem; color: var(--text-muted);">Empowering society through digital access and awareness.</p>
+             <a href="https://www.digitalindia.gov.in/" target="_blank" style="font-size: 0.875rem; color: var(--primary); font-weight: 600; text-decoration: none;">Explore &rarr;</a>
+           </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer grid-pattern">
+    <div class="footer-content" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem;">
+      <div class="footer-brand">
+        <a href="../index.html" class="brand" style="margin-bottom: 1.5rem;">
+          <img src="../assets/brand/logo.png" alt="FinScheme Logo" loading="lazy">
+          <span>FinScheme</span>
+        </a>
+        <p style="color: var(--text-muted); font-size: 0.9375rem; line-height: 1.6; max-width: 320px;">
+          Empowering citizens by simplifying access to government schemes. We bridge the gap between policy and people.
+        </p>
+      </div>
+      <div class="footer-links-group">
+        <h4 style="margin-bottom: 1.5rem; font-weight: 700;">Platform</h4>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <a href="find.html">Search Schemes</a>
+          <a href="guide.html">Guide</a>
+          <a href="categories.html">Categories</a>
+        </div>
+      </div>
+      <div class="footer-links-group">
+        <h4 style="margin-bottom: 1.5rem; font-weight: 700;">Company</h4>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <a href="about.html">About Us</a>
+          <a href="tools.html">Tools</a>
+          <a href="links.html">Links</a>
+        </div>
+      </div>
+      <div class="footer-links-group">
+        <h4 style="margin-bottom: 1.5rem; font-weight: 700;">Legal</h4>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="cookie-policy.html">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto; width: 100%;">
+        <p>&copy; 2026 FinScheme. Built with trust for every Indian.</p>
+        <div style="display: flex; gap: 1.5rem;">
+          <i data-lucide="twitter" style="width: 20px; cursor: pointer;"></i>
+          <i data-lucide="linkedin" style="width: 20px; cursor: pointer;"></i>
+          <i data-lucide="github" style="width: 20px; cursor: pointer;"></i>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  
+  <script src="../js/cookie-consent.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+
+    // Stats Logic
+    async function loadStats() {
+      try {
+        const res = await fetch('../data/schemes_en.json');
+        if (!res.ok) return;
+        const data = await res.json();
+        const countEl = document.getElementById('schemeCount');
+        if (countEl && data && data.length) {
+          countEl.textContent = data.length + "+";
+        }
+      } catch (e) {
+        console.error("Failed to load stats");
+      }
+    }
+    loadStats();
+  </script>
+  <script src="../js/curve-loader.js"></script>
+  <script src="../js/interactions.js"></script>
+</body>
+</html>
+
+

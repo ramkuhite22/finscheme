@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Resource Guide &mdash; FinScheme</title>
+  <meta name="description" content="Structured guidance for eligibility checks, documentation readiness, and scheme application tracking.">
+  <link rel="stylesheet" href="../css/theme.css">
+  <script src="../js/theme.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-init.js" defer></script>
+
+  <meta property="og:title" content="FinScheme — Find the Right Government Schemes for You">
+  <meta property="og:description" content="Discover 1,000+ central & state government schemes. Check eligibility and apply with ease.">
+  <meta property="og:image" content="../assets/brand/logo.png">
+  <meta property="og:url" content="https://finscheme.com">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="../assets/brand/logo.png">
+
+</head>
+<body class="loading">
+  <div id="global-loader"><div id="loader-canvas"></div><div class="loader-text"><span>Loading Guide</span><span class="loader-dot">.</span><span class="loader-dot">.</span><span class="loader-dot">.</span></div></div>
+  <div class="scroll-progress" id="scrollBar"></div>
+  <header class="topbar">
+    <div class="nav" style="height: 100%;">
+      <a href="../index.html" class="brand"><img src="../assets/brand/logo.png" alt="FinScheme Logo" loading="lazy"><span>FinScheme</span></a>
+      <nav class="nav-links"><a href="../index.html">Home</a><a href="find.html">Schemes</a><a href="guide.html">Guide</a><a href="tools.html">Tools</a><a href="about.html">About</a></nav>
+      <div class="nav-actions" id="user-auth">
+        <button class="btn btn-outline mobile-menu-btn" id="mobileMenuBtn" style="padding: 0.5rem; border-color: var(--border); border-radius: 8px;"><i data-lucide="menu"></i></button>
+
+        <button class="btn btn-primary btn-shimmer magnetic-target" id="login-btn" style="border-radius: var(--radius-pill); padding: 0.5rem 1.5rem;">Login</button>
+        <div id="user-button"></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero dot-pattern">
+      <div class="blur-fade">
+        <h1>FinScheme Master <span class="shiny-text">Resource Guide</span> (2026)</h1>
+        <p>Structured guidance for quick eligibility checks, documentation readiness, and application tracking.</p>
+      </div>
+      <div></div>
+    </section>
+
+    <section class="page-section">
+      <div class="page-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+        <a href="information.html" style="text-decoration: none;">
+          <div class="page-card spotlight-card clay" style="height: 100%;">
+            <div class="page-card-icon"><img src="../assets/icons/file-text.svg" alt="" aria-hidden="true" loading="lazy"></div>
+            <h3>Information Hub & Master Guide</h3>
+            <p>Read through our comprehensive guide including step-by-step application flows, master document checklists, and core pillars.</p>
+            <div style="color: var(--primary); font-size: 0.875rem; margin-top: 1rem; font-weight: 600;">Open Information &rarr;</div>
+          </div>
+        </a>
+        <a href="documents.html" style="text-decoration: none;">
+          <div class="page-card spotlight-card clay" style="height: 100%;">
+            <div class="page-card-icon"><img src="../assets/icons/filter.svg" alt="" aria-hidden="true" loading="lazy"></div>
+            <h3>Document Library</h3>
+            <p>Access our searchable library of official PDFs, including government scheme directories and MSME frameworks.</p>
+            <div style="color: var(--primary); font-size: 0.875rem; margin-top: 1rem; font-weight: 600;">Open Documents &rarr;</div>
+          </div>
+        </a>
+        <a href="updates.html" style="text-decoration: none;">
+          <div class="page-card spotlight-card clay" style="height: 100%;">
+            <div class="page-card-icon"><img src="../assets/icons/bar-chart-3.svg" alt="" aria-hidden="true" loading="lazy"></div>
+            <h3>Latest Updates</h3>
+            <p>Read news-style scheme updates and key points pulled from recent announcements.</p>
+            <div style="color: var(--primary); font-size: 0.875rem; margin-top: 1rem; font-weight: 600;">Open Updates &rarr;</div>
+          </div>
+        </a>
+        <a href="links.html" style="text-decoration: none;">
+          <div class="page-card spotlight-card clay" style="height: 100%;">
+            <div class="page-card-icon"><img src="../assets/icons/users.svg" alt="" aria-hidden="true" loading="lazy"></div>
+            <h3>Useful Links</h3>
+            <p>Jump to trusted government portals, helplines, and application trackers in one clean directory.</p>
+            <div style="color: var(--primary); font-size: 0.875rem; margin-top: 1rem; font-weight: 600;">Open Links &rarr;</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="page-section">
+      <h2 class="page-section-title">Official Guides & <span>Portals</span></h2>
+      <p class="page-section-sub">Use these portals for verified instructions and applications.</p>
+      <div class="resource-grid">
+        <div class="resource-card spotlight-card clay">
+          <h4>myScheme</h4>
+          <p>Official scheme discovery and eligibility.</p>
+          <a href="https://www.myscheme.gov.in/" target="_blank" rel="noopener">Open official site &rarr;</a>
+        </div>
+        <div class="resource-card spotlight-card clay">
+          <h4>National Portal of India</h4>
+          <p>Official government scheme directory.</p>
+          <a href="https://www.india.gov.in/my-government/schemes" target="_blank" rel="noopener">Open official site &rarr;</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer grid-pattern">
+    <div class="footer-content" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem;">
+      <div class="footer-brand"><a href="../index.html" class="brand" style="margin-bottom: 1.5rem;"><img src="../assets/brand/logo.png" alt="FinScheme Logo" loading="lazy"><span>FinScheme</span></a><p style="color: var(--text-muted); font-size: 0.9375rem; line-height: 1.6; max-width: 320px;">Empowering citizens by simplifying access to government schemes.</p></div>
+      <div class="footer-links-group"><h4 style="margin-bottom: 1.5rem; font-weight: 700;">Platform</h4><div style="display: flex; flex-direction: column; gap: 0.75rem;"><a href="find.html">Search Schemes</a><a href="guide.html">Guide</a><a href="categories.html">Categories</a></div></div>
+      <div class="footer-links-group"><h4 style="margin-bottom: 1.5rem; font-weight: 700;">Company</h4><div style="display: flex; flex-direction: column; gap: 0.75rem;"><a href="about.html">About Us</a><a href="tools.html">Tools</a><a href="links.html">Links</a></div></div>
+      <div class="footer-links-group"><h4 style="margin-bottom: 1.5rem; font-weight: 700;">Legal</h4><div style="display: flex; flex-direction: column; gap: 0.75rem;"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="cookie-policy.html">Cookie Policy</a></div></div>
+    </div>
+    <div class="footer-bottom"><div style="display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto; width: 100%;"><p>&copy; 2026 FinScheme. Built with trust for every Indian.</p><div style="display: flex; gap: 1.5rem;"><i data-lucide="twitter" style="width: 20px; cursor: pointer;"></i><i data-lucide="linkedin" style="width: 20px; cursor: pointer;"></i><i data-lucide="github" style="width: 20px; cursor: pointer;"></i></div></div></div>
+  </footer>
+
+  
+  <div id="cookie-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: white; padding: 1rem; text-align: center; z-index: 9999; display: flex; justify-content: center; gap: 1rem; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem;">
+    <span>We use cookies to improve your experience. By continuing, you agree to our <a href="privacy.html" style="color: var(--primary); text-decoration: underline;">Privacy Policy</a>.</span>
+    <button onclick="document.getElementById('cookie-banner').style.display='none'" class="btn btn-primary btn-sm" style="border-radius: 8px; padding: 0.5rem 1rem;">Accept All</button>
+  </div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+  <script src="../js/curve-loader.js"></script>
+  <script src="../js/interactions.js"></script>
+</body>
+</html>
+
+

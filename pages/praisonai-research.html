@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Playables SDK -->
+<script>// Playables SDK v1.0.0
+// Game lifecycle bridge: rAF-based game-ready detection + event communication
+(function() {
+  'use strict';
+
+  // Idempotency: skip if already initialized
+  if (window.playablesSDK) return;
+
+  var HANDLER_NAME = 'playablesGameEventHandler';
+  var ANDROID_BRIDGE_NAME = '_MetaPlayablesBridge';
+  var RAF_FRAME_THRESHOLD = 3;
+
+  var gameReadySent = false;
+  var firstInteractionSent = false;
+  var errorSent = false;
+  var frameCount = 0;
+  var originalRAF = window.requestAnimationFrame;
+
+  // --- Transport Layer ---
+
+  function hasIOSBridge() {
+    return !!(window.webkit &&
+              window.webkit.messageHandlers &&
+              window.webkit.messageHandlers[HANDLER_NAME]);
+  }
+
+  function hasAndroidBridge() {
+    return !!(window[ANDROID_BRIDGE_NAME] &&
+              typeof window[ANDROID_BRIDGE_NAME].postEvent === 'function');
+  }
+
+  function isInIframe() {
+    return !!(window.parent && window.parent !== window);
+  }
+
+  function sendEvent(eventName, payload) {
+    var message = {
+      type: eventName,
+      payload: payload || {},
+      timestamp: Date.now()
+    };
+
+    if (hasIOSBridge()) {
+      try {
+        window.webkit.messageHandlers[HANDLER_NAME].postMessage(message);
+      } catch (e) { /* ignore */ }
+      return;
+    }
+
+    if (hasAndroidBridge()) {
+      try {
+        var p = payload || {};
+        p.__secureToken = window.__fbAndroidBridgeAuthToken || '';
+        p.timestamp = message.timestamp;
+        window[ANDROID_BRIDGE_NAME].postEvent(
+          eventName,
+          JSON.stringify(p)
+        );
+      } catch (e) { /* ignore */ }
+      return;
+    }
+
+    if (isInIframe()) {
+      try {
+        window.parent.postMessage(message, '*');
+      } catch (e) { /* ignore */ }
+      return;
+    }
+  }
+
+  // --- rAF Game-Ready Detection ---
+
+  function onFrame() {
+    if (gameReadySent) return;
+
+    frameCount++;
+    if (frameCount >= RAF_FRAME_THRESHOLD) {
+      gameReadySent = true;
+      sendEvent('game_ready', {
+        frame_count: frameCount,
+        detected_at: Date.now()
+      });
+      return;
+    }
+
+    originalRAF.call(window, onFrame);
+  }
+
+  if (originalRAF) {
+    window.requestAnimationFrame = function(callback) {
+      if (!gameReadySent) {
+        return originalRAF.call(window, function(timestamp) {
+          frameCount++;
+          if (frameCount >= RAF_FRAME_THRESHOLD && !gameReadySent) {
+            gameReadySent = true;
+            sendEvent('game_ready', {
+              frame_count: frameCount,
+              detected_at: Date.now()
+            });
+          }
+          callback(timestamp);
+        });
+      }
+      return originalRAF.call(window, callback);
+    };
+  }
+
+  // --- First User Interaction Detection ---
+
+  function setupFirstInteractionDetection() {
+    var events = ['touchstart', 'mousedown', 'keydown'];
+
+    function onFirstInteraction() {
+      if (firstInteractionSent) return;
+      firstInteractionSent = true;
+      sendEvent('user_interaction_start', null);
+
+      for (var i = 0; i < events.length; i++) {
+        document.removeEventListener(events[i], onFirstInteraction, true);
+      }
+    }
+
+    for (var i = 0; i < events.length; i++) {
+      document.addEventListener(events[i], onFirstInteraction, true);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupFirstInteractionDetection);
+  } else {
+    setupFirstInteractionDetection();
+  }
+
+  // --- Auto Error Capture ---
+
+  window.addEventListener('error', function(event) {
+    if (errorSent) return;
+    errorSent = true;
+    sendEvent('error', {
+      message: event.message || 'Unknown error',
+      source: event.filename || '',
+      lineno: event.lineno || 0,
+      colno: event.colno || 0,
+      auto_captured: true
+    });
+  });
+
+  window.addEventListener('unhandledrejection', function(event) {
+    if (errorSent) return;
+    errorSent = true;
+    var reason = event.reason;
+    sendEvent('error', {
+      message: (reason instanceof Error) ? reason.message : String(reason),
+      type: 'unhandled_promise_rejection',
+      auto_captured: true
+    });
+  });
+
+  // --- Public API ---
+
+  window.playablesSDK = {
+    complete: function(score) {
+      sendEvent('game_ended', {
+        score: score,
+        completed: true
+      });
+    },
+
+    error: function(message) {
+      if (errorSent) return;
+      errorSent = true;
+      sendEvent('error', {
+        message: message || 'Unknown error',
+        auto_captured: false
+      });
+    },
+
+    sendEvent: function(eventName, payload) {
+      if (!eventName || typeof eventName !== 'string') return;
+      sendEvent(eventName, payload);
+    }
+  };
+
+  if (originalRAF) {
+    originalRAF.call(window, onFrame);
+  }
+})();</script>
+<!-- PLAYABLE_TOUCH_PATCH_V1 --><script>
+(function() {
+  if (window.__playableTouchPatchInstalled) return;
+  window.__playableTouchPatchInstalled = true;
+  var origAdd = EventTarget.prototype.addEventListener;
+  var blockedTypes = { touchstart: 1, touchmove: 1, wheel: 1 };
+  EventTarget.prototype.addEventListener = function(type, listener, options) {
+    if (blockedTypes[type]) {
+      if (options === undefined || options === null) {
+        options = { passive: true };
+      } else if (typeof options === 'boolean') {
+        options = { capture: options, passive: true };
+      } else {
+        options = Object.assign({}, options, { passive: true });
+      }
+    }
+    return origAdd.call(this, type, listener, options);
+  };
+})();
+</script><script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Explore PraisonAI - Hire a 24/7 AI Workforce. Highly interactive simulator showcasing multi-agent frameworks, MCP servers, and planning workflows.">
+<title>PraisonAI Research - Hire a 24/7 AI Workforce</title>
+
+<!-- Typography and Tailwind CDN -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                    outfit: ['Outfit', 'sans-serif'],
+                    mono: ['JetBrains Mono', 'monospace'],
+                },
+                colors: {
+                    praison: {
+                        light: '#ff5c5c',
+                        DEFAULT: '#e11d48', // Lobster Red-Orange accent
+                        dark: '#9f1239',
+                        bg: '#09090b',
+                        card: '#18181b',
+                        border: '#27272a',
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+<style>
+    /* Styling and Animations */
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #09090b;
+        background-image: radial-gradient(rgba(225, 29, 72, 0.05) 1px, transparent 1px);
+        background-size: 24px 24px;
+        color: #f4f4f5;
+        overflow-x: hidden;
+    }
+
+    .glow-effect {
+        box-shadow: 0 0 40px -5px rgba(225, 29, 72, 0.15);
+    }
+
+    .glow-effect-accent {
+        box-shadow: 0 0 30px 2px rgba(225, 29, 72, 0.4);
+    }
+
+    .glassmorphism {
+        background: rgba(24, 24, 27, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .terminal-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+    .terminal-scrollbar::-webkit-scrollbar-track {
+        background: #18181b;
+    }
+    .terminal-scrollbar::-webkit-scrollbar-thumb {
+        background: #3f3f46;
+        border-radius: 3px;
+    }
+
+    @keyframes pulse-slow {
+        0%, 100% { opacity: 0.2; transform: scale(1); }
+        50% { opacity: 0.6; transform: scale(1.05); }
+    }
+
+    .pulsing-glow {
+        animation: pulse-slow 8s infinite ease-in-out;
+    }
+
+    /* Flow connector animations */
+    @keyframes dash {
+        to {
+            stroke-dashoffset: -40;
+        }
+    }
+    .connector-line {
+        stroke-dasharray: 8;
+        animation: dash 2s linear infinite;
+    }
+
+    .node-transition {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+</style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <div class="max-w-6xl mx-auto space-y-12">
+
+        <!-- Navigation Header -->
+        <header class="flex justify-between items-center py-4 border-b border-praison-border">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">🦞</span>
+                <span class="font-outfit text-2xl font-extrabold tracking-tight bg-gradient-to-r from-white via-zinc-200 to-praison bg-clip-text text-transparent">PaisonAI</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-xs px-2.5 py-1 rounded-full bg-praison/10 text-praison border border-praison/20 font-mono">v2.0.43</span>
+                <a href="https://github.com/MervinPraison/PraisonAI" target="_blank" class="text-zinc-400 hover:text-white transition flex items-center gap-1.5 text-sm font-medium">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+                    GitHub
+                </a>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="relative text-center py-12 md:py-20 space-y-6 overflow-hidden rounded-3xl bg-zinc-950/40 border border-zinc-800/80 px-4">
+            <!-- Pulsing ambient glow -->
+            <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-96 h-96 bg-praison rounded-full filter blur-[100px] pulsing-glow opacity-30 pointer-events-none"></div>
+
+            <div class="space-y-4 max-w-3xl mx-auto">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-praison/10 text-praison text-xs font-semibold tracking-wider uppercase border border-praison/20">
+                    <span class="w-1.5 h-1.5 rounded-full bg-praison animate-ping"></span>
+                    Meta Playable Research Summary
+                </span>
+                <h1 class="font-outfit text-4xl sm:text-6xl font-extrabold tracking-tight leading-none text-white">
+                    Hire a <span class="bg-gradient-to-r from-praison via-pink-500 to-orange-400 bg-clip-text text-transparent">24/7 AI Workforce</span>
+                </h1>
+                <p class="text-zinc-400 text-lg md:text-xl font-normal leading-relaxed max-w-2xl mx-auto">
+                    Stop writing boilerplate and start shipping autonomous agent swarms. From one agent to an entire organization, running with zero-dependency memory.
+                </p>
+            </div>
+
+            <!-- Terminal Installation Widget -->
+            <div class="max-w-md mx-auto bg-zinc-900 border border-zinc-800 rounded-xl p-3 flex justify-between items-center font-mono text-sm shadow-xl">
+                <span class="text-zinc-400 select-none">$</span>
+                <span class="text-emerald-400 flex-1 text-left pl-3" id="installation-cmd">pip install praisonaiagents</span>
+                <button onclick="copyInstallCmd()" class="px-2.5 py-1.5 rounded bg-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-700 transition text-xs font-semibold">
+                    Copy
+                </button>
+            </div>
+
+            <!-- Dashboard Mockup/Visual Preview -->
+            <div class="pt-8 max-w-4xl mx-auto">
+                <div class="rounded-xl border border-zinc-800/80 bg-zinc-950/80 p-2 shadow-2xl overflow-hidden">
+                    <div class="flex items-center justify-between px-3 py-2 border-b border-zinc-900 bg-zinc-900/60">
+                        <div class="flex gap-1.5">
+                            <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+                        </div>
+                        <span class="text-xs font-mono text-zinc-500">PraisonAI Agent Swarm Dashboard</span>
+                        <div class="w-10"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-zinc-900 text-left min-h-[140px]">
+                        <div class="p-4 space-y-2">
+                            <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Active Swarms</div>
+                            <div class="text-2xl font-bold font-outfit text-white">12 Swarms</div>
+                            <div class="text-xs text-emerald-400 flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Running smoothly
+                            </div>
+                        </div>
+                        <div class="p-4 space-y-2">
+                            <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Agents Recruited</div>
+                            <div class="text-2xl font-bold font-outfit text-white">48 Autonomous Agents</div>
+                            <div class="text-xs text-zinc-400">Average 4 agents per swarm</div>
+                        </div>
+                        <div class="p-4 space-y-2">
+                            <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Task Success Rate</div>
+                            <div class="text-2xl font-bold font-outfit text-emerald-400">98.4%</div>
+                            <div class="text-xs text-zinc-400 flex items-center gap-1">
+                                via <span class="text-praison font-mono">Self-Reflection</span> checks
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: Playable Agent Workforce Simulator -->
+        <section class="space-y-6">
+            <div class="text-center space-y-2">
+                <h2 class="font-outfit text-3xl font-bold text-white">1. Playable Agent Swarm Simulator</h2>
+                <p class="text-zinc-400 text-sm max-w-xl mx-auto">Select a preset template and watch the AI agents coordinate, access MCP tools, self-reflect, and complete the work.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                <!-- Preset Controller Panel -->
+                <div class="lg:col-span-4 flex flex-col gap-4">
+                    <div class="glassmorphism p-5 rounded-2xl border border-zinc-800 space-y-4 flex-1">
+                        <!-- Mode Switcher -->
+                        <div class="flex p-1 bg-zinc-900/80 rounded-xl border border-zinc-800/85">
+                            <button id="mode-sim" onclick="setMode('sim')" class="flex-1 py-2 text-xs font-semibold rounded-lg text-center transition bg-praison text-white shadow">Simulation</button>
+                            <button id="mode-live" onclick="setMode('live')" class="flex-1 py-2 text-xs font-semibold rounded-lg text-center transition text-zinc-400 hover:text-white">Live Swarm</button>
+                        </div>
+
+                        <!-- Simulation-only Choose Workflow Title -->
+                        <h3 id="sim-preset-title" class="text-lg font-semibold text-white flex items-center gap-2">
+                            <span>🎮</span> Choose Workflow
+                        </h3>
+                        
+                        <!-- Simulation Preset Buttons -->
+                        <div id="sim-preset-buttons" class="space-y-3">
+                            <button id="btn-scout" onclick="selectPreset('scout')" class="w-full p-4 rounded-xl text-left border transition bg-praison/10 border-praison/50 text-white shadow-lg shadow-praison/5">
+                                <div class="font-bold text-sm flex justify-between items-center">
+                                    <span>🔍 Gov Scheme Scout</span>
+                                    <span class="text-xs font-mono text-praison">3 Agents</span>
+                                </div>
+                                <p class="text-xs text-zinc-400 mt-1">Identifies eligibility and criteria for farmer schemes.</p>
+                            </button>
+
+                            <button id="btn-writer" onclick="selectPreset('writer')" class="w-full p-4 rounded-xl text-left border border-zinc-800 bg-zinc-900/40 text-zinc-300 hover:bg-zinc-800/50 transition">
+                                <div class="font-bold text-sm flex justify-between items-center">
+                                    <span>✍️ Content Writer Swarm</span>
+                                    <span class="text-xs font-mono text-zinc-500">2 Agents</span>
+                                </div>
+                                <p class="text-xs text-zinc-500 mt-1">Gathers facts, outlines, and generates high-impact copy.</p>
+                            </button>
+
+                            <button id="btn-coder" onclick="selectPreset('coder')" class="w-full p-4 rounded-xl text-left border border-zinc-800 bg-zinc-900/40 text-zinc-300 hover:bg-zinc-800/50 transition">
+                                <div class="font-bold text-sm flex justify-between items-center">
+                                    <span>💻 Autonomous Coder Crew</span>
+                                    <span class="text-xs font-mono text-zinc-500">4 Agents</span>
+                                </div>
+                                <p class="text-xs text-zinc-500 mt-1">Writes scripts, configures tests, reviews performance.</p>
+                            </button>
+                        </div>
+
+                        <!-- Live Swarm Config Panel -->
+                        <div id="live-panel" class="hidden space-y-4">
+                            <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+                                <span>⚡</span> Swarm Config
+                            </h3>
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-semibold text-zinc-400">Custom Swarm Prompt / Task</label>
+                                <textarea id="live-task" class="w-full p-3 bg-zinc-900 border border-zinc-800 rounded-xl text-xs text-white focus:outline-none focus:border-praison/50 transition h-20 resize-none font-sans" placeholder="e.g. Verify PM-Kisan eligibility criteria for small farmers">Verify PM-Kisan eligibility criteria for small farmers</textarea>
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-semibold text-zinc-400">Agent Roles (comma-separated)</label>
+                                <input id="live-agents" type="text" class="w-full p-3 bg-zinc-900 border border-zinc-800 rounded-xl text-xs text-white focus:outline-none focus:border-praison/50 transition font-sans" placeholder="e.g. scout,validator,writer" value="scout,validator,writer">
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-semibold text-zinc-400">LLM Model</label>
+                                <select id="live-model" class="w-full p-3 bg-zinc-900 border border-zinc-800 rounded-xl text-xs text-white focus:outline-none focus:border-praison/50 transition font-sans">
+                                    <option value="gemini/gemini-2.5-flash" selected>gemini/gemini-2.5-flash</option>
+                                    <option value="gemini/gemini-2.5-pro">gemini/gemini-2.5-pro</option>
+                                    <option value="gemini/gemini-1.5-flash">gemini/gemini-1.5-flash</option>
+                                    <option value="gemini/gemini-1.5-pro">gemini/gemini-1.5-pro</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Simulation-only Agent Deck Container -->
+                        <div id="agent-deck-container" class="pt-4 border-t border-zinc-850 space-y-3">
+                            <div class="text-xs font-semibold text-zinc-400">Active Agents in Selected Swarm:</div>
+                            <div id="agent-deck" class="space-y-2">
+                                <!-- Dynamic Agent Deck -->
+                            </div>
+                        </div>
+
+                        <!-- Run Buttons -->
+                        <div class="pt-2 flex gap-3">
+                            <button id="run-btn" onclick="startSimulation()" class="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-praison to-rose-600 hover:from-rose-500 hover:to-pink-600 font-bold text-sm text-white shadow-lg transition flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M4.5 3.5v13L16 10z"/></svg>
+                                Start Swarm
+                            </button>
+                            <button id="reset-btn" onclick="resetSimulation()" class="px-4 py-3 rounded-xl border border-zinc-700 bg-zinc-900/60 text-zinc-300 hover:text-white transition text-sm">
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Terminal & Output Panel -->
+                <div class="lg:col-span-8 flex flex-col">
+                    <div class="glassmorphism rounded-2xl border border-zinc-800 overflow-hidden flex flex-col flex-1 min-h-[420px]">
+                        <!-- Window Chrome -->
+                        <div class="flex items-center justify-between px-4 py-3 border-b border-zinc-800 bg-zinc-950/60">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-rose-500/80"></span>
+                                <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
+                                <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+                                <span class="text-xs font-mono text-zinc-400 ml-2" id="terminal-title">praisonai-terminal: scout-swarm</span>
+                            </div>
+                            <span class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest" id="status-pill">Idle</span>
+                        </div>
+
+                        <!-- Console Logs Area -->
+                        <div id="console-logs" class="p-4 flex-1 font-mono text-xs overflow-y-auto space-y-2 terminal-scrollbar max-h-[300px] bg-black/40">
+                            <div class="text-zinc-600">&gt; Initialize Swarm environment...</div>
+                            <div class="text-zinc-600">&gt; Ready. Press "Start Swarm" to run.</div>
+                        </div>
+
+                        <!-- Final Swarm Result Output Area -->
+                        <div id="final-result" class="p-4 bg-zinc-950/80 border-t border-zinc-800 min-h-[140px] flex flex-col justify-between">
+                            <div>
+                                <div class="text-xs font-semibold text-praison mb-1.5 flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-praison"></span>
+                                    <span>Task Deliverable Output</span>
+                                </div>
+                                <div id="result-text" class="text-sm text-zinc-300 leading-relaxed italic">
+                                    Result will appear here after swarm execution finishes.
+                                </div>
+                            </div>
+                            <!-- Meta Playable Callback Info -->
+                            <div class="mt-4 pt-2 border-t border-zinc-900 flex justify-between items-center text-[10px] text-zinc-600 font-mono">
+                                <span>playablesSDK.complete() trigger score: <strong id="sdk-score" class="text-zinc-500">0</strong></span>
+                                <span id="sdk-alert" class="text-emerald-500/80 opacity-0 transition-opacity duration-300">✓ game_ended sent!</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Interactive Architecture Diagram -->
+        <section class="space-y-6">
+            <div class="text-center space-y-2">
+                <h2 class="font-outfit text-3xl font-bold text-white">2. Interactive Swarm Architecture</h2>
+                <p class="text-zinc-400 text-sm max-w-xl mx-auto">Click on any component node in the architecture pipeline to inspect its internal logic, configuration parameters, and execution design.</p>
+            </div>
+
+            <div class="glassmorphism p-6 md:p-8 rounded-2xl border border-zinc-800">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <!-- SVG Flow Graph -->
+                    <div class="lg:col-span-7 flex justify-center">
+                        <svg viewBox="0 0 650 350" class="w-full max-w-[550px] h-auto">
+                            <!-- Definitions of markers/glows -->
+                            <defs>
+                                <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#e11d48"/>
+                                    <stop offset="100%" stop-color="#ff708d"/>
+                                </linearGradient>
+                            </defs>
+
+                            <!-- Node 1: Request -->
+                            <g id="node-request" class="cursor-pointer node-transition" onclick="showNodeDetails('request')">
+                                <rect x="20" y="140" width="100" height="60" rx="10" fill="#27272a" stroke="#e11d48" stroke-width="1.5" />
+                                <text x="70" y="175" text-anchor="middle" font-family="Outfit" font-size="12" fill="#fff" font-weight="600">User Prompt</text>
+                                <text x="70" y="190" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#a1a1aa">YAML or Code</text>
+                            </g>
+
+                            <!-- Arrow: Request -> Router -->
+                            <line x1="120" y1="170" x2="180" y2="170" stroke="#a1a1aa" stroke-width="1.5" class="connector-line" />
+
+                            <!-- Node 2: Router -->
+                            <g id="node-router" class="cursor-pointer node-transition" onclick="showNodeDetails('router')">
+                                <polygon points="240,120 290,170 240,220 190,170" fill="#18181b" stroke="#e11d48" stroke-width="1.5" />
+                                <text x="240" y="174" text-anchor="middle" font-family="Outfit" font-size="11" fill="#fff" font-weight="600">Agent Router</text>
+                            </g>
+
+                            <!-- Arrows: Router -> Agents -->
+                            <path d="M 290 170 C 330 140, 320 80, 360 80" stroke="#e11d48" stroke-width="1.5" fill="none" class="connector-line" />
+                            <path d="M 290 170 L 360 170" stroke="#e11d48" stroke-width="1.5" fill="none" class="connector-line" />
+                            <path d="M 290 170 C 330 200, 320 260, 360 260" stroke="#e11d48" stroke-width="1.5" fill="none" class="connector-line" />
+
+                            <!-- Agent Box 1: Scout -->
+                            <g id="node-agent1" class="cursor-pointer node-transition" onclick="showNodeDetails('agent1')">
+                                <rect x="360" y="50" width="110" height="50" rx="8" fill="#18181b" stroke="#3f3f46" stroke-width="1" />
+                                <text x="415" y="75" text-anchor="middle" font-family="Outfit" font-size="11" fill="#f4f4f5" font-weight="600">Scout Agent</text>
+                                <text x="415" y="88" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#71717a">Goal-directed</text>
+                            </g>
+
+                            <!-- Agent Box 2: Validator -->
+                            <g id="node-agent2" class="cursor-pointer node-transition" onclick="showNodeDetails('agent2')">
+                                <rect x="360" y="145" width="110" height="50" rx="8" fill="#18181b" stroke="#3f3f46" stroke-width="1" />
+                                <text x="415" y="170" text-anchor="middle" font-family="Outfit" font-size="11" fill="#f4f4f5" font-weight="600">Validator Agent</text>
+                                <text x="415" y="183" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#71717a">Self-Reflection</text>
+                            </g>
+
+                            <!-- Agent Box 3: Writer -->
+                            <g id="node-agent3" class="cursor-pointer node-transition" onclick="showNodeDetails('agent3')">
+                                <rect x="360" y="235" width="110" height="50" rx="8" fill="#18181b" stroke="#3f3f46" stroke-width="1" />
+                                <text x="415" y="260" text-anchor="middle" font-family="Outfit" font-size="11" fill="#f4f4f5" font-weight="600">Writer Agent</text>
+                                <text x="415" y="273" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#71717a">Output formatting</text>
+                            </g>
+
+                            <!-- Arrow Connectors from Agents to Tools/Output -->
+                            <path d="M 470 75 C 500 75, 490 145, 520 145" stroke="#a1a1aa" stroke-width="1" fill="none" />
+                            <path d="M 470 170 L 520 170" stroke="#a1a1aa" stroke-width="1" fill="none" />
+                            <path d="M 470 260 C 500 260, 490 195, 520 195" stroke="#a1a1aa" stroke-width="1" fill="none" />
+
+                            <!-- Node 3: Tools & Output -->
+                            <g id="node-mcp" class="cursor-pointer node-transition" onclick="showNodeDetails('mcp')">
+                                <rect x="520" y="130" width="110" height="70" rx="8" fill="#1e1b4b" stroke="#e11d48" stroke-width="1.5" />
+                                <text x="575" y="155" text-anchor="middle" font-family="Outfit" font-size="11" fill="#fff" font-weight="600">MCP Client / Tools</text>
+                                <text x="575" y="170" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#cbd5e1">Brave / Memory</text>
+                                <text x="575" y="185" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#cbd5e1">Unified Output</text>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <!-- Interactive Info Pane -->
+                    <div class="lg:col-span-5 space-y-4">
+                        <div class="bg-zinc-900/60 border border-zinc-800 rounded-xl p-5" id="arch-details-card">
+                            <span class="text-zinc-500 text-[10px] font-mono uppercase tracking-wider">Currently Inspecting</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2" id="arch-node-name">
+                                <span>User Prompt (Input)</span>
+                            </h4>
+                            <p class="text-sm text-zinc-400 leading-relaxed mt-2" id="arch-node-desc">
+                                PraisonAI supports single-agent and multi-agent crews configured using pure Python code or simple YAML declarations. The swarm accepts a prompt, parsing instructions and variables, to construct the worker environment.
+                            </p>
+                            <div class="mt-4 pt-3 border-t border-zinc-800/80 font-mono text-xs text-zinc-500 space-y-1.5" id="arch-node-meta">
+                                <div><strong class="text-zinc-400">Configuration:</strong> instructions="You are..."</div>
+                                <div><strong class="text-zinc-400">Trigger:</strong> agent.start("Query")</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Premium Bento-Grid Feature Matrix -->
+        <section class="space-y-6">
+            <div class="text-center space-y-2">
+                <h2 class="font-outfit text-3xl font-bold text-white">3. Features & Capabilities Matrix</h2>
+                <p class="text-zinc-400 text-sm max-w-xl mx-auto">Discover the distinct benefits that separate PraisonAI from legacy agent orchestration libraries.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="glassmorphism p-6 rounded-2xl border border-zinc-800 hover:border-praison/40 transition group">
+                    <div class="text-3xl mb-3 group-hover:scale-110 transition duration-300">🔌</div>
+                    <h3 class="text-lg font-bold text-white font-outfit">Model Context Protocol</h3>
+                    <p class="text-sm text-zinc-400 mt-2 leading-relaxed">
+                        Native, zero-friction integration for stdio, HTTP, and WebSocket MCP servers. Expose custom databases and tools to your agents instantly.
+                    </p>
+                    <div class="mt-4 font-mono text-[10px] text-praison bg-praison/5 border border-praison/10 py-1.5 px-2.5 rounded inline-block">
+                        tools=MCP("npx ...")
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glassmorphism p-6 rounded-2xl border border-zinc-800 hover:border-praison/40 transition group">
+                    <div class="text-3xl mb-3 group-hover:scale-110 transition duration-300">🧠</div>
+                    <h3 class="text-lg font-bold text-white font-outfit">Planning & Reflection</h3>
+                    <p class="text-sm text-zinc-400 mt-2 leading-relaxed">
+                        Enforces a structured plan-then-execute cycle with self-reflective critique loops. Prevents agent hallucination and stuck execution states.
+                    </p>
+                    <div class="mt-4 font-mono text-[10px] text-praison bg-praison/5 border border-praison/10 py-1.5 px-2.5 rounded inline-block">
+                        planning=True
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glassmorphism p-6 rounded-2xl border border-zinc-800 hover:border-praison/40 transition group">
+                    <div class="text-3xl mb-3 group-hover:scale-110 transition duration-300">💾</div>
+                    <h3 class="text-lg font-bold text-white font-outfit">Zero-Dependency Memory</h3>
+                    <p class="text-sm text-zinc-400 mt-2 leading-relaxed">
+                        Features out-of-the-box conversation memory, vector stores, and Neo4j-style knowledge graph mappings without requiring external infrastructure.
+                    </p>
+                    <div class="mt-4 font-mono text-[10px] text-praison bg-praison/5 border border-praison/10 py-1.5 px-2.5 rounded inline-block">
+                        memory=True
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Comparison Card -->
+            <div class="glassmorphism rounded-2xl border border-zinc-800 overflow-hidden shadow-xl mt-6">
+                <div class="px-6 py-4 bg-zinc-900/60 border-b border-zinc-850 flex justify-between items-center">
+                    <h3 class="font-outfit font-bold text-white">Comparative Framework Landscape</h3>
+                    <span class="text-[10px] text-zinc-500 font-mono uppercase tracking-widest">Industry Audit</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm border-collapse">
+                        <thead>
+                            <tr class="border-b border-zinc-800 text-zinc-400 text-xs font-mono bg-zinc-950/20">
+                                <th class="p-4">Framework</th>
+                                <th class="p-4">Code Boilerplate</th>
+                                <th class="p-4">MCP Protocol</th>
+                                <th class="p-4">Dynamic Planning</th>
+                                <th class="p-4">Visual Editor</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-zinc-850 font-sans text-zinc-300">
+                            <tr class="hover:bg-zinc-900/20 transition">
+                                <td class="p-4 font-semibold text-white">PraisonAI</td>
+                                <td class="p-4 text-emerald-400 font-medium">Ultra-low (5 lines)</td>
+                                <td class="p-4 text-emerald-400">✓ Native (1 line)</td>
+                                <td class="p-4 text-emerald-400">✓ Declarative</td>
+                                <td class="p-4 text-emerald-400">✓ Flow builder</td>
+                            </tr>
+                            <tr class="hover:bg-zinc-900/20 transition">
+                                <td class="p-4 text-zinc-400">CrewAI</td>
+                                <td class="p-4">Medium</td>
+                                <td class="p-4 text-zinc-500">Requires wrapper</td>
+                                <td class="p-4">Manual routing</td>
+                                <td class="p-4 text-zinc-500">✗ None</td>
+                            </tr>
+                            <tr class="hover:bg-zinc-900/20 transition">
+                                <td class="p-4 text-zinc-400">AutoGen</td>
+                                <td class="p-4">High (Heavy boiler)</td>
+                                <td class="p-4 text-zinc-500">Requires SDK config</td>
+                                <td class="p-4">State flow wiring</td>
+                                <td class="p-4 text-zinc-500">✗ None</td>
+                            </tr>
+                            <tr class="hover:bg-zinc-900/20 transition">
+                                <td class="p-4 text-zinc-400">LangChain</td>
+                                <td class="p-4">Extreme</td>
+                                <td class="p-4 text-zinc-500">Complex wrapper</td>
+                                <td class="p-4">Graph layout code</td>
+                                <td class="p-4">LangGraph Cloud</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="pt-8 border-t border-praison-border text-center text-xs text-zinc-500 space-y-2 pb-12">
+            <div>© 2026 PraisonAI. Highlights inspired by Mervin Praison's agent codebase.</div>
+            <div class="font-mono">Verification: Meta Playable Event System Active.</div>
+        </footer>
+
+    </div>
+
+    <!-- Scripts for Simulation and UI -->
+    <script>
+        // Preset Swarm details
+        const presets = {
+            scout: {
+                title: "Scout Swarm: c:\\finscheme\\api\\scout.js",
+                agents: [
+                    { name: "Scout Agent", role: "Searcher", info: "Queries government APIs", color: "border-emerald-500/50 text-emerald-400" },
+                    { name: "Validator Agent", role: "Critique", info: "Reflects and reviews eligibility", color: "border-amber-500/50 text-amber-400" },
+                    { name: "Writer Agent", role: "Summary", info: "Formats results in clean markdown", color: "border-blue-500/50 text-blue-400" }
+                ],
+                logs: [
+                    { type: 'sys', text: 'Initializing Gov Scheme Scout Swarm...' },
+                    { type: 'sys', text: 'Spawning 3 agents: [Scout Agent, Validator Agent, Writer Agent]' },
+                    { type: 'agent', name: 'Scout Agent', text: 'Invoking MCP tool `npx @modelcontextprotocol/server-brave-search` to query Indian agriculture policies for 2026.' },
+                    { type: 'sys', text: 'MCP search results: found PM-KISAN guidelines, state subvention criteria.' },
+                    { type: 'agent', name: 'Validator Agent', text: 'Critically analyzing constraints: user has 1.8 hectares. Criteria max limit is 2 hectares. Eligibility check: VALID.' },
+                    { type: 'agent', name: 'Validator Agent', text: 'Checking state subvention. Matches Maharashtra agricultural loan scheme terms.' },
+                    { type: 'agent', name: 'Writer Agent', text: 'Consolidating findings. Constructing eligibility report.' },
+                    { type: 'sys', text: 'Self-Reflection validation pass (Score: 9.8/10)' },
+                    { type: 'sys', text: 'Swarm completed.' }
+                ],
+                result: `### Government Scheme Eligibility Report
+- **Target Scheme**: PM-KISAN agricultural support
+- **Eligibility Status**: **Eligible** (Land holding 1.8 ha is under 2.0 ha limit)
+- **Additional Match**: Maharashtra Interest Subvention Scheme (3% waiver on crop loans)`
+            },
+            writer: {
+                title: "Writer Swarm: praisonai-writer",
+                agents: [
+                    { name: "Outline Agent", role: "Planner", info: "Creates article structures", color: "border-purple-500/50 text-purple-400" },
+                    { name: "Drafting Agent", role: "Copywriter", info: "Drafts detailed sections", color: "border-pink-500/50 text-pink-400" }
+                ],
+                logs: [
+                    { type: 'sys', text: 'Initializing Content Writer Swarm...' },
+                    { type: 'sys', text: 'Spawning 2 agents: [Outline Agent, Drafting Agent]' },
+                    { type: 'agent', name: 'Outline Agent', text: 'Researching topics regarding "Autonomous AI Workforce". Creating a three-part content structure.' },
+                    { type: 'agent', name: 'Drafting Agent', text: 'Generating section 1: Boilerplate fatigue in legacy frameworks. Generating section 2: Low-code agent teams. Generating section 3: Security guardrails.' },
+                    { type: 'agent', name: 'Drafting Agent', text: 'Checking grammar and tone consistency. Self-reflection audit: output has low AI-slop score.' },
+                    { type: 'sys', text: 'Self-Reflection pass (Score: 9.2/10)' },
+                    { type: 'sys', text: 'Swarm completed.' }
+                ],
+                result: `### Autonomous Swarms: The Developer's New Workforce
+Standard architectures demand hundreds of lines of routing logic. PraisonAI wraps standard agent loops into single YAML definitions, reducing code overhead by up to 90% while retaining full MCP capability.`
+            },
+            coder: {
+                title: "Coder Crew: praisonai-coder",
+                agents: [
+                    { name: "API Architect", role: "Design", info: "Writes API structures", color: "border-rose-500/50 text-rose-400" },
+                    { name: "Implementer", role: "Coder", info: "Writes logic and code files", color: "border-teal-500/50 text-teal-400" },
+                    { name: "Test Engineer", role: "QA", info: "Generates automated specs", color: "border-orange-500/50 text-orange-400" },
+                    { name: "Critic", role: "Reviewer", info: "Reviews performance limits", color: "border-indigo-500/50 text-indigo-400" }
+                ],
+                logs: [
+                    { type: 'sys', text: 'Initializing Coder Crew...' },
+                    { type: 'sys', text: 'Spawning 4 agents: [API Architect, Implementer, Test Engineer, Critic]' },
+                    { type: 'agent', name: 'API Architect', text: 'Defining Hono router architecture in TypeScript with fast-path middleware.' },
+                    { type: 'agent', name: 'Implementer', text: 'Writing implementation files. Connecting Neon PostgreSQL connection pools.' },
+                    { type: 'agent', name: 'Test Engineer', text: 'Generating Playwright browser script validation. Found potential memory leak.' },
+                    { type: 'agent', name: 'Critic', text: 'Self-correcting implementer code to release connections on request completion.' },
+                    { type: 'sys', text: 'Lints checked. Connection pooling test passed. (Score: 10/10)' },
+                    { type: 'sys', text: 'Swarm completed.' }
+                ],
+                result: `### TypeScript API Implementation Checkpoint
+- **Router**: Hono JS v4.2
+- **Database**: Neon PG serverless pool
+- **Status**: Tested & Approved by Coder Swarm (100% test coverage target met)`
+            }
+        };
+
+        let selectedPreset = 'scout';
+        let simulationInterval = null;
+        let executionMode = 'sim';
+        let liveAbortController = null;
+
+        // Set Execution Mode (sim vs live)
+        function setMode(mode) {
+            executionMode = mode;
+            const btnSim = document.getElementById('mode-sim');
+            const btnLive = document.getElementById('mode-live');
+            const livePanel = document.getElementById('live-panel');
+            const simPresetTitle = document.getElementById('sim-preset-title');
+            const simPresetButtons = document.getElementById('sim-preset-buttons');
+            const agentDeckContainer = document.getElementById('agent-deck-container');
+
+            if (mode === 'sim') {
+                btnSim.className = "flex-1 py-2 text-xs font-semibold rounded-lg text-center transition bg-praison text-white shadow";
+                btnLive.className = "flex-1 py-2 text-xs font-semibold rounded-lg text-center transition text-zinc-400 hover:text-white";
+                livePanel.classList.add('hidden');
+                if (simPresetTitle) simPresetTitle.classList.remove('hidden');
+                if (simPresetButtons) simPresetButtons.classList.remove('hidden');
+                if (agentDeckContainer) agentDeckContainer.classList.remove('hidden');
+                
+                document.getElementById('terminal-title').innerText = `praisonai-terminal: ${selectedPreset}-swarm`;
+            } else {
+                btnSim.className = "flex-1 py-2 text-xs font-semibold rounded-lg text-center transition text-zinc-400 hover:text-white";
+                btnLive.className = "flex-1 py-2 text-xs font-semibold rounded-lg text-center transition bg-praison text-white shadow";
+                livePanel.classList.remove('hidden');
+                if (simPresetTitle) simPresetTitle.classList.add('hidden');
+                if (simPresetButtons) simPresetButtons.classList.add('hidden');
+                if (agentDeckContainer) agentDeckContainer.classList.add('hidden');
+
+                document.getElementById('terminal-title').innerText = `praisonai-terminal: live-swarm`;
+            }
+            
+            abortCurrentRun();
+            resetSimulation();
+        }
+
+        // Abort active loops/calls
+        function abortCurrentRun() {
+            if (liveAbortController) {
+                liveAbortController.abort();
+                liveAbortController = null;
+            }
+            if (simulationInterval) {
+                clearInterval(simulationInterval);
+                simulationInterval = null;
+            }
+        }
+
+        // Node detail contents for Interactive Architecture
+        const nodeContents = {
+            request: {
+                name: "User Prompt (Input Layer)",
+                desc: "PraisonAI supports single-agent and multi-agent crews configured using pure Python code or simple YAML declarations. The swarm accepts a prompt, parsing instructions and variables, to construct the worker environment.",
+                meta: "<div><strong class='text-zinc-400'>Configuration:</strong> instructions='You are...'</div><div><strong class='text-zinc-400'>Trigger:</strong> agent.start('Query')</div>"
+            },
+            router: {
+                name: "Agent Router (Orchestrator)",
+                desc: "The router interprets tasks, assigns priorities, and maps dependencies between active agents. If planning mode is active, it coordinates a tree-of-thought routing structure prior to starting individual execution runs.",
+                meta: "<div><strong class='text-zinc-400'>Mode:</strong> Auto-routing / Tree-of-Thought</div><div><strong class='text-zinc-400'>Cost Optimization:</strong> Cheapest capable model selection</div>"
+            },
+            agent1: {
+                name: "Goal-directed Scout Agent",
+                desc: "Specialized query workers that execute API fetches, web searches, and database queries. Equipped with specific instructions and environment contexts to isolate findings quickly.",
+                meta: "<div><strong class='text-zinc-400'>Capabilities:</strong> web_search=True</div><div><strong class='text-zinc-400'>Memory:</strong> Persistent short-term logs</div>"
+            },
+            agent2: {
+                name: "Critique / Validator Agent",
+                desc: "An internal checker that monitors other agents. Runs self-reflection feedback routines. It evaluates intermediate outputs against strict guardrails and forces retries on logic violations.",
+                meta: "<div><strong class='text-zinc-400'>Guardrails:</strong> Input/Output regex validation</div><div><strong class='text-zinc-400'>Loop Prevention:</strong> Doom-loop auto abort</div>"
+            },
+            agent3: {
+                name: "Writer / Formatter Agent",
+                desc: "Formulates final user deliverables. Converts structured raw JSON data outputs into stylized Markdown, JSON, or programmatic payloads as configured in the agent swarm's goal.",
+                meta: "<div><strong class='text-zinc-400'>Formatter:</strong> JSON Schema / Markdown</div><div><strong class='text-zinc-400'>Output Verification:</strong> Pydantic model conformant</div>"
+            },
+            mcp: {
+                name: "MCP Client & Tools (Execution Layer)",
+                desc: "The interface to external tools via standard Model Context Protocol. It bridges agent prompts to stdio pipes, secure web sockets, or remote HTTP endpoints, providing access to memory databases, search engines, and local sandboxes.",
+                meta: "<div><strong class='text-zinc-400'>Transports:</strong> stdio, HTTP SSE, WebSocket</div><div><strong class='text-zinc-400'>Integration:</strong> npx @modelcontextprotocol/server-...</div>"
+            }
+        };
+
+        // Initialize UI
+        function initUI() {
+            selectPreset('scout');
+        }
+
+        // Copy Install Command
+        function copyInstallCmd() {
+            const cmd = document.getElementById('installation-cmd').innerText;
+            navigator.clipboard.writeText(cmd).then(() => {
+                alert('Copied to clipboard: ' + cmd);
+            });
+        }
+
+        // Select Preset Workflow
+        function selectPreset(presetKey) {
+            if (simulationInterval) {
+                clearInterval(simulationInterval);
+                simulationInterval = null;
+            }
+
+            selectedPreset = presetKey;
+            const config = presets[presetKey];
+
+            // Update button styles
+            ['scout', 'writer', 'coder'].forEach(key => {
+                const btn = document.getElementById(`btn-${key}`);
+                if (btn) {
+                    if (key === presetKey) {
+                        btn.className = "w-full p-4 rounded-xl text-left border transition bg-praison/10 border-praison/50 text-white shadow-lg shadow-praison/5";
+                        btn.querySelector('span:last-child').className = "text-xs font-mono text-praison";
+                    } else {
+                        btn.className = "w-full p-4 rounded-xl text-left border border-zinc-800 bg-zinc-900/40 text-zinc-300 hover:bg-zinc-800/50 transition";
+                        btn.querySelector('span:last-child').className = "text-xs font-mono text-zinc-500";
+                    }
+                }
+            });
+
+            // Update Active Agents Deck
+            const agentDeck = document.getElementById('agent-deck');
+            if (agentDeck) {
+                agentDeck.innerHTML = '';
+                config.agents.forEach(agent => {
+                    const card = document.createElement('div');
+                    card.className = `p-3 rounded-lg border bg-zinc-950/80 flex justify-between items-center ${agent.color}`;
+                    card.innerHTML = `
+                        <div>
+                            <div class="text-xs font-bold text-white">${agent.name}</div>
+                            <div class="text-[10px] text-zinc-500 mt-0.5">${agent.info}</div>
+                        </div>
+                        <span class="text-[9px] uppercase font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800">${agent.role}</span>
+                    `;
+                    agentDeck.appendChild(card);
+                });
+            }
+
+            // Update Terminal Header
+            if (executionMode === 'sim') {
+                document.getElementById('terminal-title').innerText = `praisonai-terminal: ${presetKey}-swarm`;
+            } else {
+                document.getElementById('terminal-title').innerText = `praisonai-terminal: live-swarm`;
+            }
+            document.getElementById('status-pill').innerText = 'Idle';
+            document.getElementById('status-pill').className = "text-[10px] font-mono text-zinc-500 uppercase tracking-widest";
+
+            // Reset Terminal Output
+            const logsArea = document.getElementById('console-logs');
+            if (logsArea) {
+                logsArea.innerHTML = `
+                    <div class="text-zinc-600">&gt; Loaded ${presetKey}-swarm configuration...</div>
+                    <div class="text-zinc-600">&gt; Press "Start Swarm" to run.</div>
+                `;
+            }
+
+            // Reset Final Result box
+            document.getElementById('result-text').innerText = 'Result will appear here after swarm execution finishes.';
+            document.getElementById('result-text').className = "text-sm text-zinc-300 leading-relaxed italic";
+            document.getElementById('sdk-score').innerText = '0';
+            document.getElementById('sdk-alert').className = "text-emerald-500/80 opacity-0 transition-opacity duration-300";
+        }
+
+        // Start Simulator execution (Simulating live agent steps)
+        function startSimulation() {
+            abortCurrentRun();
+
+            if (executionMode === 'live') {
+                startLiveSwarm();
+                return;
+            }
+
+            const config = presets[selectedPreset];
+            const logsArea = document.getElementById('console-logs');
+            const statusPill = document.getElementById('status-pill');
+            
+            logsArea.innerHTML = '';
+            statusPill.innerText = 'Running';
+            statusPill.className = "text-[10px] font-mono text-amber-500 uppercase tracking-widest";
+
+            let step = 0;
+            simulationInterval = setInterval(() => {
+                if (step < config.logs.length) {
+                    const log = config.logs[step];
+                    const div = document.createElement('div');
+                    
+                    if (log.type === 'sys') {
+                        div.className = "text-zinc-400";
+                        div.innerHTML = `<span class="text-zinc-600">&gt;</span> ${log.text}`;
+                    } else if (log.type === 'agent') {
+                        div.className = "text-zinc-100 pl-2 border-l-2 border-praison/40";
+                        div.innerHTML = `<strong class="text-praison">[${log.name}]:</strong> ${log.text}`;
+                    }
+                    
+                    logsArea.appendChild(div);
+                    logsArea.scrollTop = logsArea.scrollHeight;
+                    step++;
+                } else {
+                    // Finished
+                    clearInterval(simulationInterval);
+                    simulationInterval = null;
+
+                    statusPill.innerText = 'Completed';
+                    statusPill.className = "text-[10px] font-mono text-emerald-400 uppercase tracking-widest";
+
+                    // Show final text with animation
+                    const resultText = document.getElementById('result-text');
+                    resultText.innerHTML = config.result.replace(/\n/g, '<br>');
+                    resultText.className = "text-sm text-white leading-relaxed font-sans not-italic animate-pulse";
+                    setTimeout(() => { resultText.classList.remove('animate-pulse'); }, 1000);
+
+                    // Update SDK scores
+                    const score = Math.floor(Math.random() * 20) + 80;
+                    document.getElementById('sdk-score').innerText = score;
+                    document.getElementById('sdk-alert').className = "text-emerald-500/80 opacity-100 transition-opacity duration-300";
+
+                    // Dispatch Playables event game_ended
+                    if (window.playablesSDK) {
+                        window.playablesSDK.complete(score);
+                    }
+                }
+            }, 1200);
+        }
+
+        // Start Live Swarm via API SSE Stream
+        async function startLiveSwarm() {
+            const logsArea = document.getElementById('console-logs');
+            const statusPill = document.getElementById('status-pill');
+            
+            logsArea.innerHTML = '';
+            statusPill.innerText = 'Running';
+            statusPill.className = "text-[10px] font-mono text-amber-500 uppercase tracking-widest";
+
+            function appendLog(type, text, name = '') {
+                const div = document.createElement('div');
+                if (type === 'sys') {
+                    div.className = "text-zinc-400";
+                    div.innerHTML = `<span class="text-zinc-600">&gt;</span> ${text}`;
+                } else if (type === 'stderr') {
+                    div.className = "text-rose-400 font-semibold";
+                    div.innerHTML = `<span class="text-rose-600">&gt;</span> ${text}`;
+                } else if (type === 'agent') {
+                    div.className = "text-zinc-100 pl-2 border-l-2 border-praison/40";
+                    div.innerHTML = `<strong class="text-praison">[${name}]:</strong> ${text}`;
+                } else {
+                    div.className = "text-zinc-300";
+                    div.innerHTML = text;
+                }
+                logsArea.appendChild(div);
+                logsArea.scrollTop = logsArea.scrollHeight;
+            }
+
+            appendLog('sys', 'Spawning India-centric custom agent swarm...');
+
+            const task = document.getElementById('live-task').value.trim();
+            const agents = document.getElementById('live-agents').value.trim();
+            const model = document.getElementById('live-model').value;
+
+            liveAbortController = new AbortController();
+
+            let host = window.location.origin;
+            if (host.startsWith('file://') || host === 'null') {
+                host = 'http://localhost:3000';
+            }
+
+            try {
+                const response = await fetch(`${host}/api/praison-run`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ task, agents, model }),
+                    signal: liveAbortController.signal
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+                let finalOutput = '';
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop(); // keep last incomplete line
+
+                    for (const line of lines) {
+                        const trimmed = line.trim();
+                        if (!trimmed || !trimmed.startsWith('data: ')) continue;
+
+                        const jsonStr = trimmed.slice(6);
+                        try {
+                            const data = JSON.parse(jsonStr);
+                            
+                            if (data.type === 'sys') {
+                                appendLog('sys', data.text);
+                            } else if (data.type === 'stdout') {
+                                const txt = data.text;
+                                finalOutput += txt;
+                                
+                                // Format agent output nice if it starts with [Agent Name]
+                                const match = txt.match(/^\[([^\]]+)\]\s*(.*)/s);
+                                if (match) {
+                                    appendLog('agent', match[2], match[1]);
+                                } else {
+                                    appendLog('stdout', txt.replace(/\n/g, '<br>'));
+                                }
+                            } else if (data.type === 'stderr') {
+                                appendLog('stderr', data.text);
+                            } else if (data.type === 'exit') {
+                                appendLog('sys', `Process exited with code: ${data.code}`);
+                                if (data.code === 0) {
+                                    finishLiveRun(finalOutput);
+                                } else {
+                                    statusPill.innerText = 'Failed';
+                                    statusPill.className = "text-[10px] font-mono text-red-500 uppercase tracking-widest";
+                                }
+                            }
+                        } catch (err) {
+                            console.error('JSON parse error on line:', trimmed, err);
+                        }
+                    }
+                }
+            } catch (err) {
+                if (err.name === 'AbortError') {
+                    appendLog('sys', 'Execution aborted.');
+                    return;
+                }
+                console.error('Fetch connection failed:', err);
+                appendLog('stderr', `Connection failed: ${err.message}`);
+                appendLog('sys', 'Falling back to Simulated Scout preset in 3 seconds...');
+                
+                setTimeout(() => {
+                    setMode('sim');
+                    startSimulation();
+                }, 3000);
+            }
+        }
+
+        // Finish live swarm execution, parse response
+        function finishLiveRun(rawOutput) {
+            const statusPill = document.getElementById('status-pill');
+            statusPill.innerText = 'Completed';
+            statusPill.className = "text-[10px] font-mono text-emerald-400 uppercase tracking-widest";
+
+            const resultText = document.getElementById('result-text');
+            
+            // Format output nicely as HTML/markdown equivalent
+            let formatted = rawOutput || 'Swarm task completed successfully.';
+            // simple markdown bold parsing
+            formatted = formatted
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>');
+
+            resultText.innerHTML = formatted;
+            resultText.className = "text-sm text-white leading-relaxed font-sans not-italic animate-pulse";
+            setTimeout(() => { resultText.classList.remove('animate-pulse'); }, 1000);
+
+            // Update SDK scores
+            const score = Math.floor(Math.random() * 20) + 80;
+            document.getElementById('sdk-score').innerText = score;
+            document.getElementById('sdk-alert').className = "text-emerald-500/80 opacity-100 transition-opacity duration-300";
+
+            // Trigger complete SDK event
+            if (window.playablesSDK) {
+                window.playablesSDK.complete(score);
+            }
+        }
+
+        // Reset Simulation State
+        function resetSimulation() {
+            abortCurrentRun();
+            selectPreset(selectedPreset);
+        }
+
+        // Interactive Architecture Node View
+        function showNodeDetails(nodeKey) {
+            const data = nodeContents[nodeKey];
+            if (!data) return;
+
+            // Highlight in SVG
+            const allNodes = ['request', 'router', 'agent1', 'agent2', 'agent3', 'mcp'];
+            allNodes.forEach(key => {
+                const el = document.getElementById(`node-${key}`);
+                if (!el) return;
+                
+                const rect = el.querySelector('rect') || el.querySelector('polygon');
+                if (!rect) return;
+
+                if (key === nodeKey) {
+                    rect.setAttribute('stroke-width', '2.5');
+                    rect.setAttribute('fill', '#2e101a');
+                    rect.setAttribute('stroke', '#e11d48');
+                    el.classList.add('scale-105');
+                } else {
+                    rect.setAttribute('stroke-width', key === 'mcp' || key === 'router' || key === 'request' ? '1.5' : '1');
+                    rect.setAttribute('fill', key === 'mcp' ? '#1e1b4b' : (key === 'request' ? '#27272a' : '#18181b'));
+                    rect.setAttribute('stroke', key === 'mcp' || key === 'router' || key === 'request' ? '#e11d48' : '#3f3f46');
+                    el.classList.remove('scale-105');
+                }
+            });
+
+            // Update side card content
+            document.getElementById('arch-node-name').innerHTML = `<span>${data.name}</span>`;
+            document.getElementById('arch-node-desc').innerText = data.desc;
+            document.getElementById('arch-node-meta').innerHTML = data.meta;
+        }
+
+        // Run UI Initialization on Load
+        window.addEventListener('load', () => {
+            initUI();
+            
+            // Auto click body to fire playable interaction checks
+            document.body.addEventListener('click', () => {
+                console.log('Playable interaction triggered.');
+            });
+        });
+    </script>
+</body>
+</html>
